@@ -1,0 +1,3046 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aykut Tüzemen — Motion Designer & AI Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0ede8;
+    --muted: #888;
+    --accent1: #ff6b35;
+    --accent2: #ff3d6b;
+    --accent3: #ffb347;
+    --grad: linear-gradient(135deg, var(--accent1), var(--accent2));
+    --grad2: linear-gradient(135deg, var(--accent2), var(--accent3));
+  }
+
+
+  /* SPLASH SCREEN */
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #splash.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .splash-scan {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 3px,
+      rgba(255,107,53,0.015) 3px, rgba(255,107,53,0.015) 4px
+    );
+    pointer-events: none;
+  }
+  .splash-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .splash-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .splash-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: rgba(255,107,53,0.6);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.3s both;
+  }
+  .splash-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 12vw, 120px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+    animation: fadeUp 0.6s 0.5s both;
+  }
+  .splash-title .line1 { display: block; color: var(--text); }
+  .splash-title .line2 {
+    display: block;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .splash-roles {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    animation: fadeUp 0.6s 0.7s both;
+  }
+  .splash-role {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .splash-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--grad);
+    margin: 36px 0;
+    animation: fadeUp 0.6s 0.9s both;
+  }
+  .splash-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 6px;
+    padding: 18px 56px;
+    border: 1px solid rgba(255,107,53,0.4);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--accent1);
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: fadeUp 0.6s 1.1s both, splashPulse 2s 1.7s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  .splash-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .splash-btn:hover::before { opacity: 0.1; }
+  .splash-btn:hover {
+    border-color: var(--accent1);
+    box-shadow: 0 0 32px rgba(255,107,53,0.25);
+    animation: none;
+    letter-spacing: 8px;
+  }
+  .splash-btn span { position: relative; z-index: 1; }
+  @keyframes splashPulse {
+    0%,100% { box-shadow: 0 0 0 rgba(255,107,53,0); }
+    50% { box-shadow: 0 0 24px rgba(255,107,53,0.2); }
+  }
+  .splash-version {
+    position: absolute;
+    bottom: 24px;
+    right: 32px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.1);
+    text-transform: uppercase;
+  }
+  .splash-coords {
+    position: absolute;
+    bottom: 24px;
+    left: 32px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.1);
+    text-transform: uppercase;
+  }
+
+  /* SECTION LOCK */
+  .section-locked {
+    display: none;
+  }
+  .section-locked.unlocked {
+    display: block;
+    animation: sectionReveal 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes sectionReveal {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HUD mission indicator */
+  .mission-hud {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    background: rgba(8,8,8,0.9);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 3px;
+    padding: 14px 18px;
+    backdrop-filter: blur(16px);
+    min-width: 200px;
+  }
+  .mission-hud.visible { opacity: 1; }
+
+  /* HUD Top - Level & XP */
+  .mission-hud-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,107,53,0.15);
+  }
+  .mission-hud-player {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .mission-hud-lvl-label {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+  .mission-hud-lvl {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    transition: transform 0.3s;
+  }
+  .mission-hud-xp-wrap { flex: 1; }
+  .mission-hud-xp-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .mission-hud-xp-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--grad);
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 0 6px rgba(255,107,53,0.5);
+  }
+  .mission-hud-xp-text {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  /* Mission items */
+  .mission-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+    padding: 4px 0;
+    transition: color 0.4s;
+  }
+  .mission-item.done { color: rgba(74,222,128,0.7); }
+  .mission-item.active { color: #ff6b35; }
+  .mission-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    transition: box-shadow 0.4s;
+  }
+  .mission-item.done .mission-dot { box-shadow: 0 0 6px rgba(74,222,128,0.6); }
+  .mission-item.active .mission-dot { box-shadow: 0 0 8px var(--accent1); animation: pulse 1.5s infinite; }
+  .mission-xp {
+    margin-left: auto;
+    font-size: 9px;
+    color: rgba(74,222,128,0.4);
+    letter-spacing: 1px;
+    transition: color 0.4s;
+  }
+  .mission-item.done .mission-xp { color: rgba(74,222,128,0.7); }
+
+  /* XP POPUP */
+  .xp-popup {
+    position: fixed;
+    right: 245px;
+    bottom: 60px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74,222,128,0.6);
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(0);
+    transition: none;
+  }
+  .xp-popup.show {
+    animation: xpFloat 1.8s ease-out forwards;
+  }
+  @keyframes xpFloat {
+    0%   { opacity: 0; transform: translateY(0); }
+    15%  { opacity: 1; transform: translateY(-10px); }
+    70%  { opacity: 1; transform: translateY(-40px); }
+    100% { opacity: 0; transform: translateY(-60px); }
+  }
+
+
+  /* NEXT LEVEL BUTTON */
+  .next-level-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 60px 0 20px;
+  }
+  .next-level-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 40px;
+    border: 1px solid rgba(255,107,53,0.35);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--accent1);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .next-level-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .next-level-btn:hover {
+    border-color: var(--accent1);
+    box-shadow: 0 0 24px rgba(255,107,53,0.2);
+    letter-spacing: 4px;
+  }
+  .next-level-btn:hover::before { opacity: 0.08; }
+  .next-level-btn span { position: relative; z-index: 1; }
+  .next-level-icon {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    animation: arrowPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes arrowPulse {
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+  .next-level-btn:hover .next-level-icon { animation: none; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cursor {
+    width: 12px; height: 12px;
+    background: var(--accent1);
+    border-radius: 50%;
+    position: fixed;
+    top: -20px; left: -20px;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(255,107,53,0.6);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,107,53,0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: -40px; left: -40px;
+    pointer-events: none;
+    z-index: 9998;
+  }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: scale(2.5); background: var(--accent2); }
+
+  /* NAV — GAMING HUD */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 56px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,107,53,0.15);
+  }
+
+  /* Scanline overlay on nav */
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(255,107,53,0.015) 2px, rgba(255,107,53,0.015) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* Left bracket */
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent1) 0%, rgba(255,107,53,0.3) 30%, transparent 60%);
+  }
+
+  /* Logo — player tag style */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--text);
+    position: relative;
+  }
+  .nav-logo-bracket {
+    color: var(--accent1);
+    font-size: 20px;
+    line-height: 1;
+    opacity: 0.8;
+  }
+  .nav-logo-name {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-logo-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    border-left: 1px solid var(--border);
+    padding-left: 10px;
+    margin-left: 2px;
+  }
+
+  /* Nav links — HUD style */
+  .nav-links {
+    display: flex;
+    gap: 0;
+    list-style: none;
+    height: 100%;
+  }
+  .nav-links li {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::before {
+    content: attr(data-index);
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 8px;
+    color: var(--accent1);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-family: 'Courier New', monospace;
+  }
+  .nav-links li:hover a,
+  .nav-links a.active-link { color: var(--text); }
+  .nav-links li:hover a::before,
+  .nav-links a.active-link::before { opacity: 1; }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 20px; right: 20px;
+    height: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+    transform-origin: left;
+  }
+  .nav-links li:hover a::after,
+  .nav-links a.active-link::after { transform: scaleX(1); }
+
+  /* Right HUD cluster */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Status indicator */
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    padding-right: 16px;
+    border-right: 1px solid var(--border);
+  }
+  .nav-status-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 6px #4ade80;
+    animation: pulse 2s infinite;
+  }
+
+  /* LANG TOGGLE — HUD button */
+  .lang-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .lang-btn {
+    padding: 5px 12px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgba(255,107,53,0.15);
+  }
+  .lang-btn:last-child { border-right: none; }
+  .lang-btn.active {
+    background: rgba(255,107,53,0.15);
+    color: var(--accent1);
+  }
+  .lang-btn:hover:not(.active) { color: var(--muted); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ANIMATION LOOP */
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 480px;
+    justify-self: center;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .anim-scene {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Outer rotating ring */
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid transparent;
+  }
+  .ring-1 {
+    width: 90%; height: 90%;
+    border-top-color: rgba(255,107,53,0.6);
+    border-right-color: rgba(255,107,53,0.15);
+    animation: spin 8s linear infinite;
+  }
+  .ring-2 {
+    width: 74%; height: 74%;
+    border-bottom-color: rgba(255,61,107,0.5);
+    border-left-color: rgba(255,61,107,0.1);
+    animation: spin 5s linear infinite reverse;
+  }
+  .ring-3 {
+    width: 56%; height: 56%;
+    border-top-color: rgba(255,179,71,0.4);
+    border-right-color: rgba(255,179,71,0.1);
+    animation: spin 12s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Center orb */
+  .orb {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(255,107,53,0.08), rgba(10,10,10,0.6) 60%, transparent);
+    border: 1px solid rgba(255,107,53,0.25);
+    box-shadow:
+      0 0 40px rgba(255,107,53,0.3),
+      0 0 80px rgba(255,61,107,0.15),
+      inset 0 0 30px rgba(255,107,53,0.05);
+    animation: orbPulse 3s ease-in-out infinite;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .prompt-wrap {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    text-align: left;
+    line-height: 1.6;
+    width: 100%;
+    padding: 0 4px;
+  }
+  .prompt-prefix {
+    color: #ffb347;
+  }
+  #prompt-text {
+    color: #ffffff;
+    word-break: break-all;
+  }
+  .prompt-cur {
+    color: #ff6b35;
+    animation: blink 0.7s step-end infinite;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255,107,53,0.5), 0 0 80px rgba(255,61,107,0.3); }
+    50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255,107,53,0.7), 0 0 120px rgba(255,61,107,0.4); }
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: floatParticle linear infinite;
+  }
+
+  @keyframes floatParticle {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-200px) scale(0.3); opacity: 0; }
+  }
+
+  /* Orbit dots */
+  .orbit-wrapper {
+    position: absolute;
+    width: 100%; height: 100%;
+    animation: spin 6s linear infinite;
+  }
+  .orbit-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent1);
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px var(--accent1);
+  }
+  .orbit-wrapper-2 {
+    position: absolute;
+    width: 74%; height: 74%;
+    animation: spin 9s linear infinite reverse;
+  }
+  .orbit-dot-2 {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    bottom: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px var(--accent2);
+  }
+
+  /* Corner decorations */
+  .corner-label {
+    position: absolute;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.18);
+    font-family: 'DM Sans', monospace;
+  }
+  .corner-label.tl { top: 4%; left: 4%; }
+  .corner-label.tr { top: 4%; right: 4%; text-align: right; }
+  .corner-label.bl { bottom: 4%; left: 4%; }
+  .corner-label.br { bottom: 4%; right: 4%; text-align: right; }
+
+  /* Scanline overlay */
+  .scanline {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* Replace hero-content max-width since it's now in grid */
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(255,107,53,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(255,61,107,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent1);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-name .line1 { display: block; }
+  .hero-name .line2 {
+    display: block;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    margin-top: 24px;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    color: var(--accent3);
+  }
+
+  .hero-desc {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #666;
+    max-width: 520px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+
+
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--grad);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(255,107,53,0.35);
+  }
+
+  .btn-outline {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-outline:hover {
+    border-color: var(--accent1);
+    color: var(--accent1);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.4s forwards;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent1), transparent);
+    animation: scrollAnim 1.5s infinite;
+  }
+  @keyframes scrollAnim {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 48px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+  }
+
+  .section-title span {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: var(--grad);
+    margin-bottom: 48px;
+  }
+
+  /* ABOUT */
+  #about { padding: 100px 48px; }
+
+  .about-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .about-header {
+    margin-bottom: 60px;
+  }
+
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  /* BIO COLUMN */
+  .about-bio-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,107,53,0.5);
+    margin-bottom: 20px;
+  }
+  .about-bio p {
+    color: #999;
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  /* DIVIDER COLUMN */
+  .about-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+    gap: 0;
+    height: 100%;
+    min-height: 300px;
+  }
+  .about-divider-line {
+    flex: 1;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,107,53,0.2), transparent);
+  }
+  .about-divider-icon {
+    font-size: 18px;
+    color: rgba(255,107,53,0.4);
+    padding: 12px 0;
+    animation: spin 8s linear infinite;
+  }
+
+  /* TERMINAL COLUMN */
+  .about-terminal-col {
+    position: sticky;
+    top: 80px;
+  }
+
+  /* STATS */
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 36px;
+  }
+  .stat-card {
+    padding: 20px 16px;
+    border: 1px solid rgba(255,107,53,0.12);
+    border-radius: 4px;
+    background: rgba(255,107,53,0.03);
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .stat-card.animated::after { transform: scaleX(1); }
+  .stat-card:hover {
+    border-color: rgba(255,107,53,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255,107,53,0.08);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-plus { font-size: 28px; }
+  .stat-label {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SKILLS */
+  
+  /* SKILLS */
+  #skills { padding: 100px 48px; }
+
+  .skills-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; width: 100%; box-sizing: border-box; }
+
+  .skills-layout {
+    display: flex;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .skill-orb-wrap { flex: 0 0 480px; }
+  .skill-categories { flex: 1; margin-left: auto; max-width: 500px; }
+
+  /* Skill Orb — left side */
+  .skill-orb-wrap {
+    position: relative;
+    width: 480px;
+    height: 480px;
+    aspect-ratio: 1;
+    justify-self: center;
+  }
+
+  .skill-orb-scene {
+    width: 100%; height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skill-center {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #1e1e1e, #0a0a0a);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    position: relative;
+  }
+  .skill-center-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .skill-center-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Orbit tracks */
+  .skill-orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,0.06);
+  }
+  .skill-orbit-1 { width: 60%; height: 60%; }
+  .skill-orbit-2 { width: 80%; height: 80%; }
+  .skill-orbit-3 { width: 98%; height: 98%; }
+
+  /* Orbiting skill nodes */
+  .snode-wrapper {
+    position: absolute;
+    width: 100%; height: 100%;
+    animation: spin var(--dur, 10s) linear infinite var(--dir, normal);
+  }
+  .snode {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    animation: spin var(--dur, 10s) linear infinite var(--counter, reverse);
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .snode:hover {
+    border-color: var(--accent1);
+    color: var(--text);
+    background: rgba(255,107,53,0.08);
+  }
+  .snode-dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* Skill categories — right side */
+  .skill-categories { display: flex; flex-direction: column; gap: 28px; }
+  .skills-layout > .skill-categories { justify-self: end; width: 100%; max-width: 520px; margin-left: auto; }
+
+  .skill-cat {}
+  .skill-cat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .skill-cat-name {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .skill-cat-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .skill-bar-track {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--grad);
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .skill-bar-fill.animate { width: var(--w); }
+  .skill-cat-tools {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .skill-tool {
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.3px;
+    transition: all 0.3s;
+  }
+  .skill-tool:hover { border-color: rgba(255,107,53,0.3); color: var(--muted); }
+
+
+
+  .project-thumb-video {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    cursor: pointer;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .project-thumb-video:hover .yt-play-btn {
+    transform: scale(1.1);
+  }
+  .yt-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.3);
+    transition: background 0.3s;
+  }
+  .project-thumb-video:hover .yt-play-overlay {
+    background: rgba(0,0,0,0.15);
+  }
+  .yt-play-btn {
+    transition: transform 0.2s;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  }
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .filter-btn {
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+  }
+  .filter-btn:hover {
+    color: var(--text);
+    border-color: rgba(255,107,53,0.3);
+  }
+  .filter-btn.active {
+    color: var(--text);
+    border-color: rgba(255,107,53,0.5);
+    background: rgba(255,107,53,0.06);
+  }
+  .filter-btn.active::after { transform: scaleX(1); }
+
+  /* Project card filter states */
+  .project-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg);
+    transition: transform 0.4s, border-color 0.4s, opacity 0.35s, scale 0.35s;
+    cursor: pointer;
+    scale: 1;
+    opacity: 1;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,107,53,0.3);
+  }
+  .project-card.hidden {
+    opacity: 0;
+    scale: 0.92;
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+  }
+
+  #projects-grid {
+    position: relative;
+  }
+
+  /* VIDEO / WORK */
+  #videos {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .videos-wrapper { max-width: 1100px; margin: 0 auto; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  /* project-card defined in filter section */
+
+  .project-thumb {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1a1a1a, #222);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-thumb .play-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: transform 0.3s;
+    z-index: 2;
+  }
+  .project-card:hover .play-btn { transform: scale(1.15); }
+
+  .project-thumb-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 40px 16px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .project-info {
+    padding: 20px;
+  }
+  .project-info h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .project-info p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .project-tags {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .yt-cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+
+  .timeline-section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin: 32px 0 16px 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,107,53,0.2);
+  }
+  .timeline-section-label:first-child { margin-top: 0; }
+
+  /* TERMINAL */
+  .terminal-box {
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    font-family: 'Courier New', monospace;
+    height: 100%;
+    min-height: 320px;
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,107,53,0.1);
+  }
+  .terminal-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .terminal-title {
+    margin-left: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.5px;
+  }
+  .terminal-body {
+    padding: 16px 20px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+    overflow-y: auto;
+    max-height: 380px;
+  }
+  .terminal-body::-webkit-scrollbar { width: 3px; }
+  .terminal-body::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.3); }
+  .t-line { display: block; min-height: 1.8em; }
+  .t-prompt { color: var(--accent1); }
+  .t-cmd { color: #fff; }
+  .t-out { color: rgba(255,255,255,0.5); }
+  .t-green { color: #4ade80; }
+  .t-orange { color: var(--accent1); }
+  .t-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent1);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  /* TIMELINE */
+  #timeline { padding: 100px 48px; position: relative; overflow: hidden; }
+  .timeline-wrapper { max-width: 1100px; margin: 0 auto; }
+
+  .timeline-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 48px;
+    margin-top: 48px;
+  }
+  .timeline-col-title {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,107,53,0.25);
+  }
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+  /* Static base line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 8px; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  /* Filled progress line */
+  .timeline::after {
+    content: '';
+    position: absolute;
+    left: 6px; top: 8px;
+    width: 1px; height: 0;
+    background: linear-gradient(to bottom, var(--accent1), var(--accent2));
+    transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .timeline.animate::after { height: calc(100% - 8px); }
+
+  /* Flowing light node */
+  .timeline-light {
+    position: absolute;
+    left: 2px;
+    top: 0;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 8px 3px var(--accent1), 0 0 20px 6px rgba(255,107,53,0.4);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+  }
+  .timeline.animate .timeline-light {
+    opacity: 1;
+    animation: flowDown 3s ease-in-out infinite;
+  }
+  @keyframes flowDown {
+    0%   { top: 0%; opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: calc(100% - 9px); opacity: 0; }
+  }
+
+
+  .timeline-sub-items {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 14px;
+    border-left: 1px solid rgba(255,107,53,0.15);
+  }
+  .timeline-sub { padding: 0; }
+  .timeline-role-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+  .timeline-year-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: rgba(255,107,53,0.5);
+    margin-bottom: 3px;
+  }
+  /* Filled dots */
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -25px; top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 2px solid rgba(255,107,53,0.2);
+    transition: all 0.4s;
+    z-index: 1;
+  }
+  .timeline-item.visible::before {
+    background: var(--accent1);
+    border-color: var(--accent1);
+    box-shadow: 0 0 0 3px rgba(255,107,53,0.15), 0 0 12px rgba(255,107,53,0.5);
+  }
+  /* Pulse ring on active dot */
+  .timeline-item.visible::after {
+    content: '';
+    position: absolute;
+    left: -29px; top: 2px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,107,53,0.3);
+    animation: dotPulse 2.5s ease-out infinite;
+    z-index: 0;
+  }
+  @keyframes dotPulse {
+    0%   { transform: scale(0.8); opacity: 0.8; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .timeline-item.visible { opacity: 1; transform: translateX(0); }
+
+  .timeline-year {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--accent1);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .timeline-role { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .timeline-place { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .timeline-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+  @media (max-width: 768px) { .timeline-columns { grid-template-columns: 1fr; } }
+
+  /* CONTACT */
+  #contac }
+  }
+
+  /* CONTACT */
+  #contac }
+  }
+
+  /* CONTACT */
+  #contac; }
+  }
+  /* CONTACT */
+  #contact {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact-wrapper .section-title { margin-bottom: 16px; }
+
+  .contact-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  .contact-email {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: opacity 0.3s;
+    margin-bottom: 48px;
+  }
+  .contact-email:hover { opacity: 0.75; }
+
+  .social-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    padding: 12px 24px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .social-link:hover {
+    border-color: var(--accent1);
+    color: var(--accent1);
+  }
+
+
+  /* STAGE PROGRESS */
+  .go-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+  .go-stage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.4s;
+    font-family: 'Courier New', monospace;
+    text-decoration: none;
+    color: inherit;
+    cursor: default;
+  }
+  .go-stage.done {
+    cursor: pointer;
+  }
+  .go-stage.done:hover {
+    border-color: rgba(255,107,53,0.4) !important;
+    background: rgba(255,107,53,0.06) !important;
+    transform: translateX(4px);
+  }
+  .go-stage-icon {
+    font-size: 14px;
+    color: var(--muted);
+    transition: all 0.4s;
+    width: 16px;
+    text-align: center;
+  }
+  .go-stage-name {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    transition: color 0.4s;
+    text-transform: uppercase;
+  }
+  .go-stage.done {
+    border-color: rgba(74,222,128,0.25);
+    background: rgba(74,222,128,0.04);
+  }
+  .go-stage.done:hover .go-stage-arrow { opacity: 1 !important; }
+  .go-stage.done .go-stage-icon {
+    color: #4ade80;
+    text-shadow: 0 0 8px #4ade80;
+  }
+  .go-stage.done .go-stage-name { color: rgba(255,255,255,0.7); }
+
+  .go-cta-locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    animation: none !important;
+    border-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+  .go-cta-locked:hover {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  /* FOOTER — GAME OVER */
+  footer {
+    border-top: 1px solid rgba(255,107,53,0.2);
+    background: var(--bg);
+  }
+  .footer-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    text-align: center;
+  }
+  .game-over-screen {
+    position: relative;
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 4px;
+    padding: 60px 40px;
+    background: rgba(255,107,53,0.03);
+    overflow: hidden;
+  }
+  .go-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 3px,
+      rgba(255,107,53,0.02) 3px, rgba(255,107,53,0.02) 4px
+    );
+    pointer-events: none;
+  }
+  .go-content { position: relative; z-index: 1; }
+  .go-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 96px);
+    letter-spacing: 8px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    animation: goFlicker 4s infinite;
+  }
+  @keyframes goFlicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.4; }
+    97% { opacity: 1; }
+    98% { opacity: 0.6; }
+    99% { opacity: 1; }
+  }
+  .go-sub {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 12px;
+    margin-bottom: 40px;
+  }
+  .go-score {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 48px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .go-score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .go-score-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+  }
+  .go-score-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .go-rank {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .go-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border: 1px solid rgba(255,107,53,0.4);
+    border-radius: 2px;
+    color: var(--accent1);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    animation: ctaPulse 2s ease-in-out infinite;
+    margin-bottom: 32px;
+  }
+  .go-cta:hover {
+    background: rgba(255,107,53,0.1);
+    box-shadow: 0 0 24px rgba(255,107,53,0.2);
+    animation: none;
+  }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(255,107,53,0); }
+    50% { box-shadow: 0 0 20px rgba(255,107,53,0.2); }
+  }
+  .go-cta-bracket { opacity: 0.6; font-size: 16px; }
+  .go-cta-blink { animation: blink 0.7s step-end infinite; }
+  .go-copyright {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ANIMATIONS */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .blink { animation: blink 1s step-end infinite; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+  
+    section { padding: 72px 24px; }
+    #hero { padding: 100px 24px 80px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { max-width: 280px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+    .skill-orb-wrap { max-width: 300px; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  /* Highlight line for sections */
+  .highlight-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .highlight-bar .bar {
+    width: 40px; height: 2px;
+    background: var(--grad);
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="splash-scan"></div>
+  <div class="splash-glow"></div>
+  <div class="splash-content">
+    <div class="splash-label">— Portfolyo v1.0 —</div>
+    <div class="splash-title">
+      <span class="line1">ALPAGUT AYKUT</span>
+      <span class="line2">TÜZEMEN</span>
+    </div>
+    <div class="splash-roles">
+      <span class="splash-role">AI Artist & Video Editor</span>
+      <span class="splash-role">Motion Designer</span>
+    </div>
+    <div class="splash-divider"></div>
+    <button class="splash-btn" id="splash-btn"><span>OYUNA BAŞLA</span></button>
+  </div>
+  <div class="splash-coords">INPUT: IMAGE → OUTPUT: VIDEO</div>
+  <div class="splash-version">© 2025 AAT</div>
+</div>
+
+<!-- MISSION HUD -->
+<div class="mission-hud" id="mission-hud">
+  <div class="mission-hud-top">
+    <div class="mission-hud-player">
+      <span class="mission-hud-lvl-label">LVL</span>
+      <span class="mission-hud-lvl" id="hud-level">1</span>
+    </div>
+    <div class="mission-hud-xp-wrap">
+      <div class="mission-hud-xp-bar">
+        <div class="mission-hud-xp-fill" id="hud-xp-fill"></div>
+      </div>
+      <span class="mission-hud-xp-text" id="hud-xp-text">0 XP</span>
+    </div>
+  </div>
+  <div class="mission-item" data-mission="about" data-xp="150"><div class="mission-dot"></div><span data-tr="Hakkımda" data-en="About">Hakkımda</span><span class="mission-xp">+150 XP</span></div>
+  <div class="mission-item" data-mission="skills" data-xp="200"><div class="mission-dot"></div><span data-tr="Beceriler" data-en="Skills">Beceriler</span><span class="mission-xp">+200 XP</span></div>
+  <div class="mission-item" data-mission="videos" data-xp="250"><div class="mission-dot"></div><span data-tr="Çalışmalar" data-en="Work">Çalışmalar</span><span class="mission-xp">+250 XP</span></div>
+  <div class="mission-item" data-mission="timeline" data-xp="300"><div class="mission-dot"></div><span data-tr="Deneyim" data-en="Experience">Deneyim</span><span class="mission-xp">+300 XP</span></div>
+</div>
+
+<!-- XP POPUP -->
+<div class="xp-popup" id="xp-popup"></div>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <!-- Logo / Player tag -->
+  <div class="nav-logo">
+    <span class="nav-logo-bracket">[</span>
+    <span class="nav-logo-name">AAT</span>
+    <span class="nav-logo-bracket">]</span>
+    <span class="nav-logo-tag" data-tr="AI ARTIST & VIDEO EDITOR" data-en="AI ARTIST & VIDEO EDITOR">AI ARTIST & VIDEO EDITOR</span>
+  </div>
+
+
+
+  <!-- Right cluster -->
+  <div class="nav-right">
+    <div class="nav-status">
+      <div class="nav-status-dot"></div>
+      <span data-tr="MÜSAİT" data-en="AVAILABLE">MÜSAİT</span>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="tr">TR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-inner">
+    <!-- LEFT: Text -->
+    <div class="hero-content">
+      <div class="hero-tag" data-tr="✦ Yapay Zeka & Animasyon İçerik Üreticisi" data-en="✦ AI & Animation Content Creator">✦ Yapay Zeka & Animasyon İçerik Üreticisi</div>
+      <h1 class="hero-name">
+        <span class="line1">ALPAGUT AYKUT</span>
+        <span class="line2">TÜZEMEN</span>
+      </h1>
+      <p class="hero-title">
+        <em>AI Artist & Video Editor</em> — Motion Designer
+      </p>
+
+      
+    </div>
+
+    <!-- RIGHT: Animation Loop -->
+    <div class="hero-visual">
+      <div class="anim-scene">
+        <!-- Rings -->
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+
+        <!-- Orbit dots -->
+        <div class="orbit-wrapper"><div class="orbit-dot"></div></div>
+        <div class="orbit-wrapper-2"><div class="orbit-dot-2"></div></div>
+
+        <!-- Center orb -->
+        <div class="orb">
+            <div class="prompt-wrap">
+              <span class="prompt-prefix">&gt; </span><span id="prompt-text"></span><span class="prompt-cur">_</span>
+            </div>
+          </div>
+
+        <!-- Particles -->
+        <div class="particle" style="width:4px;height:4px;background:#ff6b35;left:48%;animation-duration:4s;animation-delay:0s;"></div>
+        <div class="particle" style="width:3px;height:3px;background:#ff3d6b;left:52%;animation-duration:5s;animation-delay:1s;"></div>
+        <div class="particle" style="width:5px;height:5px;background:#ffb347;left:45%;animation-duration:3.5s;animation-delay:2s;"></div>
+        <div class="particle" style="width:3px;height:3px;background:#ff6b35;left:55%;animation-duration:6s;animation-delay:0.5s;"></div>
+        <div class="particle" style="width:4px;height:4px;background:#ff3d6b;left:50%;animation-duration:4.5s;animation-delay:3s;"></div>
+        <div class="particle" style="width:2px;height:2px;background:#fff;left:47%;animation-duration:5.5s;animation-delay:1.5s;"></div>
+
+        <div class="scanline"></div>
+
+        <!-- Corner labels removed -->
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span data-tr="Kaydır" data-en="Scroll">Kaydır</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section-locked">
+  <div class="about-container">
+
+    <!-- TOP: Title + intro full width -->
+    <div class="about-header fade-up">
+      <div class="section-label" data-tr="01 — Hakkımda" data-en="01 — About">01 — Hakkımda</div>
+      <h2 class="section-title" data-tr="Beni <span>Tanı</span>" data-en="Get To <span>Know Me</span>">Beni <span>Tanı</span></h2>
+    </div>
+
+    <!-- BOTTOM: 3 column grid -->
+    <div class="about-body">
+
+      <!-- COL 1: Bio text -->
+      <div class="about-bio fade-up">
+        <div class="about-bio-tag" data-tr="// BİO" data-en="// BIO">// BİO</div>
+        <p data-tr="Aykut. Maltepe Üniversitesi Güzel Sanatlar Fakültesi Çizgi Film ve Animasyon Bölümü'nü tam burslu tamamladım. Sinema alanında yüksek lisans eğitimime devam ediyorum." data-en="Aykut. Completed Animation & Cartoon Design at Maltepe University on full scholarship. Currently pursuing a Master's in Cinema.">
+          Aykut. Maltepe Üniversitesi Güzel Sanatlar Fakültesi Çizgi Film ve Animasyon Bölümü'nü tam burslu tamamladım. Sinema alanında yüksek lisans eğitimime devam ediyorum.
+        </p>
+        <p data-tr="Motion designer olarak 5 yıllık deneyime sahibim. 1,5–2 yıldır yapay zekâ destekli prodüksiyon süreçlerinde uzmanlaşarak realistic/3D masal projeleri üretiyor; görsel geliştirme, animasyon ve kurgu dahil üretimin tüm aşamalarında görev alıyorum." data-en="5 years of motion design experience. Specializing in AI-assisted production for 1.5–2 years, creating realistic/3D fairy tale projects across all production stages.">
+          Motion designer olarak 5 yıllık deneyime sahibim. 1,5–2 yıldır yapay zekâ destekli prodüksiyon süreçlerinde uzmanlaşarak realistic/3D masal projeleri üretiyor; görsel geliştirme, animasyon ve kurgu dahil üretimin tüm aşamalarında görev alıyorum.
+        </p>
+
+        <!-- Stats inside bio col -->
+        <div class="about-stats">
+          <div class="stat-card" data-target="7">
+            <div class="stat-num"><span class="stat-counter">0</span><span class="stat-plus">+</span></div>
+            <div class="stat-label" data-tr="Yıl Deneyim" data-en="Years">Yıl Deneyim</div>
+          </div>
+          <div class="stat-card" data-target="50">
+            <div class="stat-num"><span class="stat-counter">0</span><span class="stat-plus">+</span></div>
+            <div class="stat-label" data-tr="Proje" data-en="Projects">Proje</div>
+          </div>
+          <div class="stat-card" data-target="5">
+            <div class="stat-num"><span class="stat-counter">0</span></div>
+            <div class="stat-label" data-tr="Üniversite" data-en="Uni">Üniversite</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: Divider -->
+      <div class="about-divider fade-up" style="transition-delay:0.1s">
+        <div class="about-divider-line"></div>
+        <div class="about-divider-icon">◈</div>
+        <div class="about-divider-line"></div>
+      </div>
+
+      <!-- COL 3: Terminal -->
+      <div class="about-terminal-col fade-up" style="transition-delay:0.2s">
+        <div class="terminal-box" id="about-terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot" style="background:#ff5f57"></span>
+            <span class="terminal-dot" style="background:#febc2e"></span>
+            <span class="terminal-dot" style="background:#28c840"></span>
+            <span class="terminal-title">aykut@portfolio:~</span>
+          </div>
+          <div class="terminal-body" id="terminal-body"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="next-level-wrap">
+    <button class="next-level-btn" onclick="goNextLevel('skills')">
+      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 02 — BECERİLER" data-en="NEXT STAGE — STAGE 02 — SKILLS">SONRAKİ BÖLÜM — BÖLÜM 02 — BECERİLER</span>
+      <span class="next-level-icon">→</span>
+    </button>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section-locked">
+  <div class="skills-wrapper">
+    <div class="fade-up">
+      <div class="section-label" data-tr="02 — Beceriler" data-en="02 — Skills">02 — Beceriler</div>
+      <h2 class="section-title" data-tr="Uzmanlık <span>Alanlarım</span>" data-en="Areas of <span>Expertise</span>">Uzmanlık <span>Alanlarım</span></h2>
+    </div>
+
+    <div class="skills-layout">
+
+      <!-- LEFT: Orbital skill nodes -->
+      <div class="skill-orb-wrap fade-up">
+        <div class="skill-orb-scene">
+          <!-- Orbit tracks -->
+          <div class="skill-orbit skill-orbit-1"></div>
+          <div class="skill-orbit skill-orbit-2"></div>
+          <div class="skill-orbit skill-orbit-3"></div>
+
+          <!-- Inner orbit: Core skills -->
+          <div class="snode-wrapper" style="--dur:14s; width:60%; height:60%;">
+            <div class="snode" style="--dur:14s; --counter:reverse;"><span class="snode-dot" style="background:#ff6b35"></span>After Effects</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:14s; --dir:reverse; width:60%; height:60%; transform:rotate(180deg);">
+            <div class="snode" style="--dur:14s; --counter:normal; transform:translateX(-50%) translateY(-50%) rotate(-180deg);"><span class="snode-dot" style="background:#ff3d6b"></span>Premier Pro</div>
+          </div>
+
+          <!-- Mid orbit -->
+          <div class="snode-wrapper" style="--dur:20s; width:80%; height:80%;">
+            <div class="snode" style="--dur:20s; --counter:reverse;"><span class="snode-dot" style="background:#ffb347"></span>Kling</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:20s; width:80%; height:80%; transform:rotate(120deg);">
+            <div class="snode" style="--dur:20s; --counter:reverse; transform:translateX(-50%) translateY(-50%) rotate(-120deg);"><span class="snode-dot" style="background:#ff6b35"></span>Google Veo 3.1</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:20s; width:80%; height:80%; transform:rotate(240deg);">
+            <div class="snode" style="--dur:20s; --counter:reverse; transform:translateX(-50%) translateY(-50%) rotate(-240deg);"><span class="snode-dot" style="background:#ff3d6b"></span>Higgsfield</div>
+          </div>
+
+          <!-- Outer orbit -->
+          <div class="snode-wrapper" style="--dur:28s; --dir:reverse; width:98%; height:98%;">
+            <div class="snode" style="--dur:28s; --counter:normal;"><span class="snode-dot" style="background:#ff6b35"></span>Nanobanana</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:28s; --dir:reverse; width:98%; height:98%; transform:rotate(90deg);">
+            <div class="snode" style="--dur:28s; --counter:normal; transform:translateX(-50%) translateY(-50%) rotate(-90deg);"><span class="snode-dot" style="background:#ffb347"></span>Motion</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:28s; --dir:reverse; width:98%; height:98%; transform:rotate(180deg);">
+            <div class="snode" style="--dur:28s; --counter:normal; transform:translateX(-50%) translateY(-50%) rotate(-180deg);"><span class="snode-dot" style="background:#ff3d6b"></span>Unreal Engine</div>
+          </div>
+          <div class="snode-wrapper" style="--dur:28s; --dir:reverse; width:98%; height:98%; transform:rotate(270deg);">
+            <div class="snode" style="--dur:28s; --counter:normal; transform:translateX(-50%) translateY(-50%) rotate(-270deg);"><span class="snode-dot" style="background:#ff6b35"></span>Level Design</div>
+          </div>
+
+          <!-- Center -->
+          <div class="skill-center">
+            <div class="skill-center-num">10+</div>
+            <div class="skill-center-label" data-tr="Yıl" data-en="Years">Yıl</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Category bars -->
+      <div class="skill-categories fade-up" style="transition-delay:0.15s">
+
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-cat-name" data-tr="Motion" data-en="Motion">Motion</span>
+            <span class="skill-cat-pct">80%</span>
+          </div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:80%"></div></div>
+          <div class="skill-cat-tools">
+            <span class="skill-tool">After Effects</span>
+            <span class="skill-tool">Premier Pro</span>
+          </div>
+        </div>
+
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-cat-name" data-tr="Yapay Zeka Video Üretimi" data-en="AI Video Production">Yapay Zeka Video Üretimi</span>
+            <span class="skill-cat-pct">95%</span>
+          </div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:95%"></div></div>
+          <div class="skill-cat-tools">
+            <span class="skill-tool">Kling</span>
+            <span class="skill-tool">Nanobanana Pro</span>
+            <span class="skill-tool">Higgsfield</span>
+            <span class="skill-tool">Google Veo 3.1</span>
+          </div>
+        </div>
+
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-cat-name" data-tr="Level Designer" data-en="Level Designer">Level Designer</span>
+            <span class="skill-cat-pct">70%</span>
+          </div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:70%"></div></div>
+          <div class="skill-cat-tools">
+            <span class="skill-tool">Unreal Engine 5</span>
+          </div>
+        </div>
+
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-cat-name" data-tr="Eğitim" data-en="Education">Eğitim</span>
+            <span class="skill-cat-pct">88%</span>
+          </div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:88%"></div></div>
+          <div class="skill-cat-tools">
+            <span class="skill-tool">Yapay Zeka Eğitimi</span>
+            <span class="skill-tool">Level Design Eğitimi</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="next-level-wrap">
+    <button class="next-level-btn" onclick="goNextLevel('videos')">
+      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 03 — ÇALIŞMALAR" data-en="NEXT STAGE — STAGE 03 — WORK">SONRAKİ BÖLÜM — BÖLÜM 03 — ÇALIŞMALAR</span>
+      <span class="next-level-icon">→</span>
+    </button>
+  </div>
+</section>
+
+<!-- VIDEOS / WORK -->
+<section id="videos" class="section-locked">
+  <div class="videos-wrapper">
+    <div class="fade-up">
+      <div class="section-label" data-tr="03 — Seçili Çalışmalar" data-en="03 — Selected Work">03 — Seçili Çalışmalar</div>
+      <h2 class="section-title" data-tr="<span>Projeler</span>" data-en="<span>Projects</span>"><span>Projeler</span></h2>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-bar fade-up">
+      <button class="filter-btn active" data-filter="all" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="filter-btn" data-filter="2d" data-tr="2D Animasyon" data-en="2D Animation">2D Animasyon</button>
+      <button class="filter-btn" data-filter="3d" data-tr="3D Animasyon" data-en="3D Animation">3D Animasyon</button>
+      <button class="filter-btn" data-filter="motion" data-tr="Motion Design" data-en="Motion Design">Motion Design</button>
+      <button class="filter-btn" data-filter="ai" data-tr="AI Video" data-en="AI Video">AI Video</button>
+      <button class="filter-btn" data-filter="kurumsal" data-tr="Kurumsal" data-en="Corporate">Kurumsal</button>
+      <button class="filter-btn" data-filter="karakter" data-tr="Karakter" data-en="Character">Karakter</button>
+    </div>
+
+    <div class="projects-grid" id="projects-grid">
+
+      <div class="project-card" data-cats="ai" style="max-width:720px;margin:0 auto;">
+        <div class="project-thumb-video" id="video-preveza" onclick="playVideo(this, 'lqkT4TmoRKM')">
+          <img src="preveza_thumb.jpg" alt="Canlanan Tarih Demo" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;">
+          <div class="yt-play-overlay">
+            <div class="yt-play-btn">
+              <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Canlanan Tarih — Demo</h3>
+          <p data-tr="Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir." data-en="I created a demo video for a documentary series called Canlanan Tarih. All visuals, videos and editing belong to me.">Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir.</p>
+          <div class="project-tags">
+            <span class="tag">AI Video</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    
+
+  <div class="next-level-wrap">  <div class="next-level-wrap">
+    <button class="next-level-btn" onclick="goNextLevel('timeline')">
+      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 04 — DENEYİM" data-en="NEXT STAGE — STAGE 04 — EXPERIENCE">SONRAKİ BÖLÜM — BÖLÜM 04 — DENEYİM</span>
+      <span class="next-level-icon">→</span>
+    </button>
+  </div>
+</section>
+
+<!-- TIMELINE / EXPERIENCE -->
+<section id="timeline" class="section-locked">
+  <div class="timeline-wrapper">
+    <div class="fade-up">
+      <div class="section-label" data-tr="04 — Eğitim & Deneyim" data-en="04 — Education & Experience">04 — Eğitim & Deneyim</div>
+      <h2 class="section-title" data-tr="Kariyer <span>Yolculuğu</span>" data-en="Career <span>Journey</span>">Kariyer <span>Yolculuğu</span></h2>
+    </div>
+    <div class="timeline-wrapper">
+    <div class="timeline-columns">
+
+      <!-- KARİYER -->
+      <div class="timeline-col">
+        <div class="timeline-col-title" data-tr="— Kariyer" data-en="— Career">— Kariyer</div>
+        <div class="timeline" id="career-timeline"><div class="timeline-light"></div>
+
+          <!-- Adisebaba Animasyon -->
+          <div class="timeline-item">
+            <div class="timeline-year" data-tr="Eyl 2025 — Devam Ediyor" data-en="Sep 2025 — Present">Eyl 2025 — Devam Ediyor</div>
+            <div class="timeline-role">Adisebaba Animasyon</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub">AI Artist & Video Editor</div>
+                <div class="timeline-desc">Yapay zeka araçlarıyla video üretimi ve editörlük. Midjourney, Krea, Stylar, Runway, Minimax aktif kullanımda.</div>
+              </div>
+              <div class="timeline-sub">
+                <div class="timeline-role-sub">Video Editörü</div>
+                <div class="timeline-year-sub">Tem 2024 — Eyl 2025</div>
+                <div class="timeline-desc">KIŞAKES projesinde Video Editörü olarak görev yaptım.</div>
+              </div>
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="YZ Destekli Karakter Tasarımı" data-en="AI-Assisted Character Design">YZ Destekli Karakter Tasarımı</div>
+                <div class="timeline-year-sub">Kas 2023 — Kas 2024</div>
+                <div class="timeline-desc">Yapay zeka araçlarıyla karakter tasarımı ve animasyon üretimi.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navras Akademi -->
+          <div class="timeline-item">
+            <div class="timeline-year" data-tr="Ağu 2022 — Eki 2024" data-en="Aug 2022 — Oct 2024">Ağu 2022 — Eki 2024</div>
+            <div class="timeline-role">Navras Akademi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Eğitmen — Unreal Engine" data-en="Instructor — Unreal Engine">Eğitmen — Unreal Engine</div>
+                <div class="timeline-desc">Unreal Engine, 3B modelleme ve hareket tasarımı eğitimleri.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alaaddin -->
+          <div class="timeline-item">
+            <div class="timeline-year" data-tr="Şub 2021 — Eki 2023" data-en="Feb 2021 — Oct 2023">Şub 2021 — Eki 2023</div>
+            <div class="timeline-role">Alaaddin</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub">Motion Designer</div>
+                <div class="timeline-desc">Hareket tasarımı, video düzenleme ve içerik üretimi.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MozartCultures -->
+          <div class="timeline-item">
+            <div class="timeline-year" data-tr="Haz 2018 — Devam Ediyor" data-en="Jun 2018 — Present">Haz 2018 — Devam Ediyor</div>
+            <div class="timeline-role">MozartCultures</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Genel Yayın Yönetmeni" data-en="Editor-in-Chief">Genel Yayın Yönetmeni</div>
+                <div class="timeline-desc">Türkiye sorumlusu. Sosyal medya, video düzenleme ve içerik üretimi.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EĞİTİM --><!-- EĞİTİM -->
+      <div class="timeline-col">
+        <div class="timeline-col-title" data-tr="— Eğitim" data-en="— Education">— Eğitim</div>
+        <div class="timeline" id="edu-timeline"><div class="timeline-light"></div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2020 — 2022</div>
+            <div class="timeline-role">Maltepe Üniversitesi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Yüksek Lisans — Film Tasarımı" data-en="Master's — Film Design">Yüksek Lisans — Film Tasarımı</div>
+                <div class="timeline-desc" data-tr="3D Tasarım, Sinema ve ilgili alanlarda akademik çalışmalar." data-en="Academic studies in 3D Design, Cinema and related fields.">3D Tasarım, Sinema ve ilgili alanlarda akademik çalışmalar.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2019 — 2022</div>
+            <div class="timeline-role">İstanbul Üniversitesi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Lisans — Tarih (AUZEF)" data-en="Bachelor's — History (AUZEF)">Lisans — Tarih (AUZEF)</div>
+                <div class="timeline-desc">Açık ve uzaktan eğitim programı.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2017 — 2020</div>
+            <div class="timeline-role">Maltepe Üniversitesi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Lisans — Çizgi Film ve Animasyon (Tam Burs)" data-en="Bachelor's — Animation (Full Scholarship)">Lisans — Çizgi Film ve Animasyon (Tam Burs)</div>
+                <div class="timeline-desc">Grafik Tasarım, 3D Tasarım ve animasyon alanında eğitim.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2014 — 2017</div>
+            <div class="timeline-role">İstanbul Topkapı Üniversitesi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="Önlisans — Animasyon & Video Grafik" data-en="Associate's — Animation & Video Graphics">Önlisans — Animasyon & Video Grafik</div>
+                <div class="timeline-desc">Animation, Interactive Technology, Video Graphics and Special Effects. Not: 3.20</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2010 — 2013</div>
+            <div class="timeline-role">Yıldız Teknik Üniversitesi</div>
+            <div class="timeline-sub-items">
+              <div class="timeline-sub">
+                <div class="timeline-role-sub" data-tr="MYO — Elektrik/Elektronik Bakımı" data-en="Vocational — Electrical/Electronics">MYO — Elektrik/Elektronik Bakımı ve Onarım Teknolojisi</div>
+                <div class="timeline-desc">Mühendislik temelleri, analitik düşünce.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+        <div class="next-level-wrap">
+    <button class="next-level-btn" onclick="finishGame()">
+      <span data-tr="OYUNU TAMAMLA" data-en="COMPLETE THE GAME">OYUNU TAMAMLA</span>
+      <span class="next-level-icon">★</span>
+    </button>
+  </div>
+
+  </div>
+</section>
+
+<!-- FOOTER — GAME OVER -->
+<footer>
+  <div class="footer-inner">
+    <div class="game-over-screen">
+      <div class="go-scanlines"></div>
+      <div class="go-content">
+        <div class="go-title" data-tr="OYUN BİTTİ" data-en="GAME OVER">OYUN BİTTİ</div>
+        <div class="go-sub" data-tr="Portfolyoyu tamamladınız." data-en="You completed the portfolio.">Portfolyoyu tamamladınız.</div>
+        <div class="go-score">
+          <div class="go-score-item">
+            <span class="go-score-label" data-tr="SÜRE" data-en="TIME">SÜRE</span>
+            <span class="go-score-val" id="footer-time">00:00</span>
+          </div>
+          <div class="go-score-item">
+            <span class="go-score-label">LEVEL</span>
+            <span class="go-score-val go-rank" id="go-final-lvl">—</span>
+          </div>
+          <div class="go-score-item">
+            <span class="go-score-label">XP</span>
+            <span class="go-score-val" id="go-final-xp">—</span>
+          </div>
+          <div class="go-score-item">
+            <span class="go-score-label">RANK</span>
+            <span class="go-score-val go-rank" id="player-rank">—</span>
+          </div>
+        </div>
+
+        <!-- Stage progress -->
+        <div class="go-stages" id="go-stages">
+          <a class="go-stage" data-section="about" href="#about">
+            <span class="go-stage-icon">○</span>
+            <span class="go-stage-name" data-tr="BÖLÜM 01 — HAKKIMDA" data-en="STAGE 01 — ABOUT">BÖLÜM 01 — HAKKIMDA</span>
+            <span class="go-stage-arrow" style="margin-left:auto;font-size:11px;color:var(--accent1);opacity:0;transition:opacity 0.3s;">↑</span>
+          </a>
+          <a class="go-stage" data-section="skills" href="#skills">
+            <span class="go-stage-icon">○</span>
+            <span class="go-stage-name" data-tr="BÖLÜM 02 — BECERİLER" data-en="STAGE 02 — SKILLS">BÖLÜM 02 — BECERİLER</span>
+            <span class="go-stage-arrow" style="margin-left:auto;font-size:11px;color:var(--accent1);opacity:0;transition:opacity 0.3s;">↑</span>
+          </a>
+          <a class="go-stage" data-section="videos" href="#videos">
+            <span class="go-stage-icon">○</span>
+            <span class="go-stage-name" data-tr="BÖLÜM 03 — ÇALIŞMALAR" data-en="STAGE 03 — WORK">BÖLÜM 03 — ÇALIŞMALAR</span>
+            <span class="go-stage-arrow" style="margin-left:auto;font-size:11px;color:var(--accent1);opacity:0;transition:opacity 0.3s;">↑</span>
+          </a>
+          <a class="go-stage" data-section="timeline" href="#timeline">
+            <span class="go-stage-icon">○</span>
+            <span class="go-stage-name" data-tr="BÖLÜM 04 — DENEYİM" data-en="STAGE 04 — EXPERIENCE">BÖLÜM 04 — DENEYİM</span>
+            <span class="go-stage-arrow" style="margin-left:auto;font-size:11px;color:var(--accent1);opacity:0;transition:opacity 0.3s;">↑</span>
+          </a>
+
+        </div>
+
+        <!-- Locked CTA -->
+        <div id="go-cta-locked" class="go-cta go-cta-locked">
+          <span class="go-cta-bracket">🔒</span>
+          <span id="go-locked-text" data-tr="TÜM BÖLÜMLERİ TAMAMLA" data-en="COMPLETE ALL STAGES">TÜM BÖLÜMLERİ TAMAMLA</span>
+        </div>
+        <!-- Unlocked CTA -->
+        <a href="#hero" class="go-cta go-cta-unlocked" id="go-cta-unlocked" style="display:none;">
+          <span class="go-cta-bracket">&gt;&gt;</span>
+          <span data-tr="DEVAM ETMEK İÇİN İLETİŞİME GEÇ" data-en="INSERT COIN TO CONTINUE">DEVAM ETMEK İÇİN İLETİŞİME GEÇ</span>
+          <span class="go-cta-blink">_</span>
+        </a>
+        <div class="go-copyright">© 2025 ALPAGUT AYKUT TÜZEMEN</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // CURSOR — clean implementation
+  var cursor = document.getElementById('cursor');
+  var ring   = document.getElementById('cursor-ring');
+  var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = (mouseX - 6) + 'px';
+    cursor.style.top  = (mouseY - 6) + 'px';
+  });
+
+  (function animateRing() {
+    ringX += (mouseX - ringX - 18) * 0.12;
+    ringY += (mouseY - ringY - 18) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  // SCROLL ANIMATIONS
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-up, .timeline-item').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // SKILL BAR ANIMATION
+  var barObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(function(bar) {
+          bar.classList.add('animate');
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.skill-categories').forEach(function(el) {
+    barObserver.observe(el);
+  });
+
+  // LANGUAGE TOGGLE
+  var currentLang = 'tr';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-tr]').forEach(function(el) {
+      var val = el.getAttribute('data-' + lang);
+      if (!val) return;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = val;
+      } else if (el.innerHTML.indexOf('<') !== -1) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-lang') === lang) btn.classList.add('active');
+    });
+    document.documentElement.lang = lang;
+  }
+
+  // LANG BUTTON EVENTS
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.getAttribute('data-lang');
+      // Switch prompts
+      prompts = lang === 'en' ? promptsEN : promptsTR;
+      pIdx = 0; cIdx = 0; deleting = false;
+      // Switch UI language
+      setLang(lang);
+    });
+  });
+
+  // TYPEWRITER PROMPT
+  var promptsTR = [
+    "neden çalışmalıyız?",
+    "kaliteli içerikler,",
+    "gerçekçi veya 3d videolar,",
+    "ve yapay zekanın",
+    "sınırlarını zorlamak",
+    "istiyorsanız,",
+    "benimle iletişime geçin."
+  ];
+  var promptsEN = [
+    "why work with me?",
+    "high quality content,",
+    "realistic or 3d videos,",
+    "and pushing the limits",
+    "of artificial intelligence",
+    "is what you need,",
+    "get in touch."
+  ];
+  var prompts = promptsTR;
+  var ptEl = document.getElementById('prompt-text');
+  var pIdx = 0, cIdx = 0, deleting = false;
+
+  function typePrompt() {
+    if (!ptEl) return;
+    var current = prompts[pIdx];
+    if (!deleting) {
+      ptEl.textContent = current.slice(0, cIdx + 1);
+      cIdx++;
+      if (cIdx === current.length) {
+        deleting = true;
+        // longer pause at last line before restarting
+        var isLast = pIdx === prompts.length - 1;
+        setTimeout(typePrompt, isLast ? 3000 : 1200);
+        return;
+      }
+      setTimeout(typePrompt, 75);
+    } else {
+      ptEl.textContent = current.slice(0, cIdx - 1);
+      cIdx--;
+      if (cIdx === 0) {
+        deleting = false;
+        // if last line, restart from beginning
+        pIdx = (pIdx + 1) % prompts.length;
+        setTimeout(typePrompt, pIdx === 0 ? 800 : 300);
+        return;
+      }
+      setTimeout(typePrompt, 35);
+    }
+  }
+  typePrompt();
+
+  // PROJECT FILTER
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  var projectCards = document.querySelectorAll('.project-card');
+
+  filterBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var filter = btn.getAttribute('data-filter');
+
+      // Update active button
+      filterBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      // Filter cards
+      projectCards.forEach(function(card) {
+        var cats = card.getAttribute('data-cats') || '';
+        var show = filter === 'all' || cats.indexOf(filter) !== -1;
+        if (show) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // SPLASH & SECTION UNLOCK
+  var gameStarted = false;
+  var unlockedSections = [];
+  var sectionOrder = ['about', 'skills', 'videos', 'timeline', 'contact'];
+  var nextUnlock = 0;
+
+  // Start game
+  document.getElementById('splash-btn').addEventListener('click', function() {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('mission-hud').classList.add('visible');
+    gameStarted = true;
+
+    // Unlock first section (about) after splash fades
+    setTimeout(function() {
+      unlockSection('about');
+    }, 600);
+  });
+
+  function unlockSection(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('unlocked');
+    unlockedSections.push(id);
+    
+
+    // Mark previous as done in HUD
+    var idx = sectionOrder.indexOf(id);
+    if (idx > 0) {
+      var prevId = sectionOrder[idx - 1];
+      var prevItem = document.querySelector('.mission-item[data-mission="' + prevId + '"]');
+      if (prevItem) { prevItem.classList.remove('active'); prevItem.classList.add('done'); }
+    }
+
+    // Update mission HUD
+    updateMissionHUD(id);
+
+    // Section-specific inits
+    if (id === 'about') { setTimeout(initTerminal, 500); setTimeout(animateCounters, 300); }
+  }
+
+  function updateMissionHUD(justUnlocked) {
+    document.querySelectorAll('.mission-item').forEach(function(item) {
+      var m = item.getAttribute('data-mission');
+      item.classList.remove('active', 'done');
+      var mIdx = sectionOrder.indexOf(m);
+      var justIdx = sectionOrder.indexOf(justUnlocked);
+      if (mIdx < justIdx) {
+        item.classList.add('done');
+      } else if (m === justUnlocked) {
+        item.classList.add('active');
+      }
+    });
+  }
+
+
+
+  // PLAY VIDEO
+  function playVideo(el, videoId) {
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>';
+    el.onclick = null;
+  }
+
+  // STAT COUNTER ANIMATION
+  function animateCounters() {
+    document.querySelectorAll('.stat-card').forEach(function(card, i) {
+      var target = parseInt(card.getAttribute('data-target')) || 0;
+      var counter = card.querySelector('.stat-counter');
+      if (!counter) return;
+      card.classList.add('animated');
+      var start = 0;
+      var duration = 1200;
+      var startTime = null;
+      setTimeout(function() {
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var progress = Math.min((timestamp - startTime) / duration, 1);
+          var ease = 1 - Math.pow(1 - progress, 3);
+          counter.textContent = Math.floor(ease * target);
+          if (progress < 1) requestAnimationFrame(step);
+          else counter.textContent = target;
+        }
+        requestAnimationFrame(step);
+      }, i * 200);
+    });
+  }
+
+  // TERMINAL
+  var terminalLines = [
+    { type: 'prompt', cmd: 'whoami', delay: 300 },
+    { type: 'out', text: 'Alpagut Aykut Tüzemen', delay: 600 },
+    { type: 'prompt', cmd: 'cat ./title.txt', delay: 1200 },
+    { type: 'out', text: 'AI Artist & Video Editor', delay: 1500 },
+    { type: 'out', text: 'Motion Designer', delay: 1800 },
+    { type: 'prompt', cmd: 'ls ./skills', delay: 2400 },
+    { type: 'out', text: 'After_Effects/  Kling/  Unreal_Engine/', delay: 2700 },
+    { type: 'out', text: 'Midjourney/     Runway/  Higgsfield/', delay: 3000 },
+    { type: 'prompt', cmd: 'cat ./experience.log', delay: 3600 },
+    { type: 'out', text: '[2018] MozartCultures — Yayın Yönetmeni', delay: 3900 },
+    { type: 'out', text: '[2020] CapDogs — Co-Founder', delay: 4100 },
+    { type: 'out', text: '[2021] Alaaddin — Motion Designer', delay: 4300 },
+    { type: 'out', text: '[2022] Navras — Unreal Eğitmeni', delay: 4500 },
+    { type: 'out', text: '[2024] Adisebaba — AI Artist', delay: 4700 },
+    { type: 'prompt', cmd: 'check --status', delay: 5300 },
+    { type: 'green', text: '✓ Müsait: Yeni projeler için açık', delay: 5600 },
+    { type: 'prompt', cmd: '', delay: 6500, cursor: true },
+  ];
+
+  function initTerminal() {
+    var body = document.getElementById('terminal-body');
+    if (!body) return;
+    body.innerHTML = '';
+
+    terminalLines.forEach(function(line) {
+      setTimeout(function() {
+        var span = document.createElement('span');
+        span.className = 't-line';
+
+        if (line.type === 'prompt') {
+          span.innerHTML = '<span class="t-prompt">❯ </span><span class="t-cmd">' + line.cmd + '</span>' +
+            (line.cursor ? '<span class="t-cursor"></span>' : '');
+        } else if (line.type === 'green') {
+          span.innerHTML = '<span class="t-green">' + line.text + '</span>';
+        } else {
+          span.innerHTML = '<span class="t-out">' + line.text + '</span>';
+        }
+
+        // Remove previous cursor if any
+        var oldCursor = body.querySelector('.t-cursor');
+        if (oldCursor) oldCursor.remove();
+
+        body.appendChild(span);
+        body.scrollTop = body.scrollHeight;
+      }, line.delay);
+    });
+  }
+
+  function loadYT() {
+    var wrap = document.getElementById('yt-thumb-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/lqkT4TmoRKM?autoplay=1" title="Canlanan Tarih Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;position:absolute;top:0;left:0;border:none;"></iframe>';
+    wrap.style.cursor = 'default';
+  }
+
+  // XP SYSTEM
+  var totalXPMax = 900;
+  var currentHudXP = 0;
+  var currentHudLevel = 1;
+
+  function hudLevelFromXP(xp) {
+    if (xp < 150) return 1;
+    if (xp < 350) return 2;
+    if (xp < 600) return 3;
+    return 4;
+  }
+
+  function showXPPopup(xp) {
+    var el = document.getElementById('xp-popup');
+    if (!el) return;
+    el.textContent = '+' + xp + ' XP';
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 1800);
+  }
+
+  function awardXP(missionEl) {
+    var xp = parseInt(missionEl.getAttribute('data-xp')) || 0;
+    if (!xp) return;
+    currentHudXP += xp;
+    var pct = Math.min(100, (currentHudXP / totalXPMax) * 100);
+    var fillEl = document.getElementById('hud-xp-fill');
+    var textEl = document.getElementById('hud-xp-text');
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (textEl) textEl.textContent = currentHudXP + ' XP';
+    var newLevel = hudLevelFromXP(currentHudXP);
+    if (newLevel !== currentHudLevel) {
+      currentHudLevel = newLevel;
+      var lvlEl = document.getElementById('hud-level');
+      if (lvlEl) {
+        lvlEl.textContent = currentHudLevel;
+        lvlEl.style.transform = 'scale(1.5)';
+        setTimeout(function() { lvlEl.style.transform = 'scale(1)'; }, 500);
+      }
+    }
+    showXPPopup(xp);
+  }
+
+  // FINISH GAME
+  function finishGame() {
+    // Mark all sections done in HUD + award final XP
+    document.querySelectorAll('.mission-item').forEach(function(item) {
+      if (!item.classList.contains('done')) {
+        item.classList.remove('active');
+        item.classList.add('done');
+        awardXP(item);
+      }
+    });
+    // Update stage tracker count to 4
+    var countEl = document.getElementById('completed-count');
+    var rankEl = document.getElementById('player-rank');
+    if (countEl) countEl.textContent = '4';
+    if (rankEl) rankEl.textContent = 'S+';
+    // Update stage items in footer
+    document.querySelectorAll('.go-stage').forEach(function(s) {
+      s.classList.add('done');
+      s.querySelector('.go-stage-icon').textContent = '✓';
+    });
+    // Show unlock CTA
+    var locked = document.getElementById('go-cta-locked');
+    var unlocked = document.getElementById('go-cta-unlocked');
+    if (locked) locked.style.display = 'none';
+    if (unlocked) unlocked.style.display = 'inline-flex';
+    // Scroll to footer
+    setTimeout(function() {
+      document.querySelector('footer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+  }
+
+  // NEXT LEVEL BUTTON
+  function goNextLevel(nextId) {
+    // Unlock if not already
+    if (unlockedSections.indexOf(nextId) === -1) {
+      unlockSection(nextId);
+    }
+    // Scroll to next section
+    setTimeout(function() {
+      var el = document.getElementById(nextId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
+
+  // TIMELINE ANIMATION
+  var timelineObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+        var items = entry.target.querySelectorAll('.timeline-item');
+        items.forEach(function(item, i) {
+          setTimeout(function() { item.classList.add('visible'); }, i * 150);
+        });
+        timelineObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  ['career-timeline', 'edu-timeline'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) timelineObserver.observe(el);
+  });
+
+  // STAGE TRACKER// STAGE TRACKER
+  var completedSections = {};
+  var allSections = ['about', 'skills', 'videos', 'timeline'];
+  var ranks = ['—', 'D', 'C', 'B', 'A', 'S+'];
+
+  var stageObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.getAttribute('id');
+        if (id && allSections.indexOf(id) !== -1 && !completedSections[id]) {
+          completedSections[id] = true;
+
+          // Mark stage as done
+          var stageEl = document.querySelector('.go-stage[data-section="' + id + '"]');
+          if (stageEl) {
+            stageEl.classList.add('done');
+            stageEl.querySelector('.go-stage-icon').textContent = '✓';
+          }
+
+          // Update count & rank
+          var count = Object.keys(completedSections).length;
+          var countEl = document.getElementById('completed-count');
+          var rankEl = document.getElementById('player-rank');
+          if (countEl) countEl.textContent = count;
+          if (rankEl) rankEl.textContent = ranks[count] || 'S+';
+
+          // Unlock CTA if all done
+          if (count === allSections.length) {
+            setTimeout(function() {
+              var locked = document.getElementById('go-cta-locked');
+              var unlocked = document.getElementById('go-cta-unlocked');
+              if (locked) locked.style.display = 'none';
+              if (unlocked) unlocked.style.display = 'inline-flex';
+            }, 600);
+          }
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+
+  allSections.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) stageObserver.observe(el);
+  });
+
+
+
+  // FOOTER TIMER — time spent on page
+  var startTime = Date.now();
+  setInterval(function() {
+    var elapsed = Math.floor((Date.now() - startTime) / 1000);
+    var m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    var s = (elapsed % 60).toString().padStart(2, '0');
+    var el = document.getElementById('footer-time');
+    if (el) el.textContent = m + ':' + s;
+  }, 1000);
+
+  // NAV active highlight on scroll
+  var navSections = document.querySelectorAll('section[id]');
+  var navLinks    = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', function() {
+    var current = '';
+    navSections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(function(a) {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+    });
+  });
+</script>
+</body>
+</html>
