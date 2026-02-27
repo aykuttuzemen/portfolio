@@ -34,9 +34,41 @@
     transition: opacity 0.8s ease, visibility 0.8s ease;
   }
   #splash.hide {
-    opacity: 0;
-    visibility: hidden;
     pointer-events: none;
+  }
+  #splash.hide .splash-content {
+    animation: splashContentExit 0.3s 1.2s forwards;
+  }
+  @keyframes splashContentExit {
+    to { opacity: 0; transform: translateY(-20px); }
+  }
+  #splash.hide::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    animation: splashWipe 0.4s 1.3s forwards;
+    opacity: 0;
+    z-index: 9999;
+  }
+  @keyframes splashWipe {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+    15%  { opacity: 1; transform: scale(1.01); filter: brightness(2) contrast(1.3) saturate(0); }
+    20%  { opacity: 1; transform: scale(1); filter: none; }
+    22%  { opacity: 0.7; transform: scale(1) translateY(-2px); filter: brightness(1.5); }
+    24%  { opacity: 1; transform: scale(1); filter: none; }
+    60%  { opacity: 1; transform: scale(1) translateY(0); filter: none; }
+    100% { opacity: 0; transform: scale(1.06) translateY(-20px); filter: blur(10px) brightness(2); }
+  }
+    20%  { opacity: 1; transform: scale(1); filter: brightness(1.5) contrast(1.2); }
+    25%  { opacity: 0.8; transform: scale(1.01); filter: brightness(3) saturate(0); }
+    30%  { opacity: 1; transform: scale(1); filter: none; }
+    50%  { opacity: 1; transform: scale(1); filter: none; }
+    70%  { opacity: 0; transform: scale(1.04) translateY(-8px); filter: blur(8px) brightness(2); }
+    100% { opacity: 0; transform: scale(1.08) translateY(-16px); visibility: hidden; filter: blur(12px); }
   }
   .splash-scan {
     position: absolute;
@@ -73,14 +105,19 @@
   }
   .splash-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 12vw, 120px);
-    letter-spacing: 4px;
-    line-height: 0.9;
+    font-size: clamp(60px, 10vw, 120px);
+    letter-spacing: 2px;
+    line-height: 0.95;
     animation: fadeUp 0.6s 0.5s both;
   }
-  .splash-title .line1 { display: block; color: var(--text); }
+  .splash-title .line1 {
+    display: block;
+    color: var(--text);
+  }
   .splash-title .line2 {
     display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
     background: var(--grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -109,6 +146,44 @@
     margin: 36px 0;
     animation: fadeUp 0.6s 0.9s both;
   }
+
+  /* Splash Loading */
+  .splash-loading {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 32px;
+    width: 280px;
+  }
+  .sl-status {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent1);
+    min-height: 16px;
+  }
+  .sl-bar-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,107,53,0.15);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .sl-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px var(--accent1);
+  }
+  .sl-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--accent1);
+    opacity: 0.7;
+  }
   .splash-btn {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
@@ -123,6 +198,7 @@
     animation: fadeUp 0.6s 1.1s both, splashPulse 2s 1.7s ease-in-out infinite;
     position: relative;
     overflow: hidden;
+    margin-top: 40px;
   }
   .splash-btn::before {
     content: '';
@@ -316,26 +392,29 @@
   /* NEXT LEVEL BUTTON */
   .next-level-wrap {
     display: flex;
-    justify-content: center;
-    padding: 60px 0 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 40px 0 20px;
   }
   .next-level-btn {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 40px;
+    padding: 12px 28px;
     border: 1px solid rgba(255,107,53,0.35);
     border-radius: 2px;
     background: transparent;
     color: var(--accent1);
     font-family: 'Courier New', monospace;
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 3px;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
   }
   .next-level-btn::before {
     content: '';
@@ -837,26 +916,27 @@
   .hero-name .line1 { display: block; }
   .hero-name .line2 {
     display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
     background: var(--grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .hero-title {
+    .hero-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 0.3px;
     margin-top: 24px;
-    font-size: 18px;
-    font-weight: 300;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
   }
 
-  .hero-title em {
+    .hero-title em {
+    color: #c8a97e;
     font-style: italic;
-    font-family: 'Playfair Display', serif;
-    color: var(--accent3);
   }
 
   .hero-desc {
@@ -947,6 +1027,7 @@
     text-transform: uppercase;
     color: var(--accent1);
     margin-bottom: 16px;
+    text-align: left;
   }
 
   .section-title {
@@ -955,6 +1036,7 @@
     line-height: 1;
     letter-spacing: 1px;
     margin-bottom: 48px;
+    text-align: left;
   }
 
   .section-title span {
@@ -1092,15 +1174,66 @@
 
   .skills-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; width: 100%; box-sizing: border-box; }
 
+
+
+  .skill-sub-title {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,107,53,0.35);
+    text-transform: uppercase;
+    margin: 14px 0 6px;
+    padding-left: 2px;
+  }
+  .skill-group-title {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,107,53,0.5);
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
+
   .skills-layout {
     display: flex;
-    gap: 80px;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 60px;
     margin-top: 60px;
+    width: 100%;
   }
-  .skill-orb-wrap { flex: 0 0 480px; }
-  .skill-categories { flex: 1; margin-left: auto; max-width: 500px; }
-
+  .skill-orb-wrap {
+    position: relative;
+    width: 420px;
+    height: 420px;
+    aspect-ratio: 1;
+    justify-self: center;
+    flex-shrink: 0;
+  }
+  .skill-categories {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .skill-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 80px;
+    align-items: start;
+  }
+  .skill-col { display: flex; flex-direction: column; }
+  .skill-lang-row {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,107,53,0.08);
+  }
+  .skill-lang-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 80px;
+    margin-top: 8px;
+  }
+  .skill-group-full { grid-column: 1 / -1; }
   /* Skill Orb — left side */
   .skill-orb-wrap {
     position: relative;
@@ -1191,6 +1324,25 @@
   }
 
   /* Skill categories — right side */
+
+
+  .skill-sub-title {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,107,53,0.35);
+    text-transform: uppercase;
+    margin: 14px 0 6px;
+    padding-left: 2px;
+  }
+  .skill-group-title {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,107,53,0.5);
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
   .skill-categories { display: flex; flex-direction: column; gap: 28px; }
   .skills-layout > .skill-categories { justify-self: end; width: 100%; max-width: 520px; margin-left: auto; }
 
@@ -1359,12 +1511,13 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .videos-wrapper { max-width: 1100px; margin: 0 auto; }
+  .videos-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
 
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: 1fr;
     gap: 24px;
+    margin-top: 32px;
   }
 
   /* project-card defined in filter section */
@@ -1509,9 +1662,10 @@
 
   .timeline-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 48px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 120px;
     margin-top: 48px;
+    align-items: start;
   }
   .timeline-col-title {
     font-family: 'Courier New', monospace;
@@ -1648,16 +1802,328 @@
 
   @media (max-width: 768px) { .timeline-columns { grid-template-columns: 1fr; } }
 
+
+  .splash-how {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .splash-how-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .splash-how-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent1);
+  }
+  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
+  .splash-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  /* Section CTA message */
+  .section-cta-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #4ade80;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    max-width: 600px;
+    padding: 8px 14px;
+    border-left: 2px solid #4ade80;
+    background: rgba(74,222,128,0.05);
+    display: inline-block;
+  }
+  /* Game over score msg */
+  .go-score-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin-bottom: 24px;
+    min-height: 24px;
+    letter-spacing: 1px;
+  }
+
+  .go-title.congrats {
+    animation: none;
+    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: congratsShimmer 2s ease infinite;
+  }
+  @keyframes congratsShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .go-subtitle-congrats {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #4ade80;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   /* CONTACT */
   #contac }
   }
 
+
+  .splash-how {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .splash-how-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .splash-how-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent1);
+  }
+  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
+  .splash-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  /* Section CTA message */
+  .section-cta-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    max-width: 600px;
+  }
+  /* Game over score msg */
+  .go-score-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin-bottom: 24px;
+    min-height: 24px;
+    letter-spacing: 1px;
+  }
+
+  .go-title.congrats {
+    animation: none;
+    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: congratsShimmer 2s ease infinite;
+  }
+  @keyframes congratsShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .go-subtitle-congrats {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #4ade80;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   /* CONTACT */
   #contac }
   }
 
+
+  .splash-how {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .splash-how-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .splash-how-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent1);
+  }
+  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
+  .splash-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  /* Section CTA message */
+  .section-cta-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    max-width: 600px;
+  }
+  /* Game over score msg */
+  .go-score-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin-bottom: 24px;
+    min-height: 24px;
+    letter-spacing: 1px;
+  }
+
+  .go-title.congrats {
+    animation: none;
+    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: congratsShimmer 2s ease infinite;
+  }
+  @keyframes congratsShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .go-subtitle-congrats {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #4ade80;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   /* CONTACT */
   #contac; }
+  }
+
+  .splash-how {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .splash-how-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .splash-how-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent1);
+  }
+  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
+  .splash-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  /* Section CTA message */
+  .section-cta-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    max-width: 600px;
+  }
+  /* Game over score msg */
+  .go-score-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin-bottom: 24px;
+    min-height: 24px;
+    letter-spacing: 1px;
+  }
+
+  .go-title.congrats {
+    animation: none;
+    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: congratsShimmer 2s ease infinite;
+  }
+  @keyframes congratsShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .go-subtitle-congrats {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #4ade80;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   /* CONTACT */
   #contact {
@@ -1942,8 +2408,7 @@
     .hero-visual { max-width: 280px; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-stats { grid-template-columns: 1fr 1fr; }
-    .skills-layout { grid-template-columns: 1fr; gap: 40px; }
-    .skill-orb-wrap { max-width: 300px; }
+      .skill-orb-wrap { max-width: 300px; }
     footer { flex-direction: column; gap: 8px; text-align: center; }
   }
 
@@ -1957,6 +2422,55 @@
   .highlight-bar .bar {
     width: 40px; height: 2px;
     background: var(--grad);
+  }
+
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; padding: 40px 24px; gap: 40px; }
+    .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+    .about-body { grid-template-columns: 1fr; }
+    .about-divider { display: none; }
+      .skill-orb-wrap { width: 280px; height: 280px; margin: 0 auto; }
+    .skill-categories { max-width: 100%; }
+    .timeline-columns { flex-direction: column; }
+    .timeline-col:last-child { margin-left: 0; padding-left: 28px; }
+    #about, #skills, #videos, #timeline { padding: 60px 20px; }
+    .section-title { font-size: clamp(32px, 10vw, 60px); }
+    .mission-hud { top: 8px; right: 8px; padding: 8px 10px; }
+    .mission-hud-title { display: none; }
+    .about-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 14px 10px; }
+    .stat-num { font-size: 28px; }
+    .next-level-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 40px 0 20px;
+  }
+    .section-cta-msg { font-size: 11px; }
+    .terminal-box { min-height: 200px; }
+    .go-stats { grid-template-columns: 1fr 1fr; }
+    .splash-how { gap: 8px; }
+    .splash-how-arrow { display: none; }
+  }
+  @media (max-width: 480px) {
+    .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+    .about-body { gap: 30px; }
+    .timeline-col { padding-left: 20px; }
   }
 </style>
 </head>
@@ -1973,11 +2487,19 @@
       <span class="line2">TÜZEMEN</span>
     </div>
     <div class="splash-roles">
-      <span class="splash-role">AI Artist & Video Editor</span>
-      <span class="splash-role">Motion Designer</span>
+      <span class="splash-role">AI ARTIST &amp; VIDEO EDITOR</span>
+      <span class="splash-role">MOTION DESIGNER</span>
     </div>
-    <div class="splash-divider"></div>
-    <button class="splash-btn" id="splash-btn"><span>OYUNA BAŞLA</span></button>
+    <button class="splash-btn" id="splash-btn"><span data-tr="OYUNA BAŞLA" data-en="START GAME">OYUNA BAŞLA</span></button>
+
+    <!-- Loading overlay - shown on click -->
+    <div class="splash-loading" id="splash-loading">
+      <div class="sl-status" id="sl-status">INITIALIZING...</div>
+      <div class="sl-bar-track">
+        <div class="sl-bar-fill" id="sl-bar-fill"></div>
+      </div>
+      <div class="sl-pct" id="sl-pct">0%</div>
+    </div>
   </div>
   <div class="splash-coords">INPUT: IMAGE → OUTPUT: VIDEO</div>
   <div class="splash-version">© 2025 AAT</div>
@@ -2043,7 +2565,8 @@
     <div class="hero-content">
       <div class="hero-tag" data-tr="✦ Yapay Zeka & Animasyon İçerik Üreticisi" data-en="✦ AI & Animation Content Creator">✦ Yapay Zeka & Animasyon İçerik Üreticisi</div>
       <h1 class="hero-name">
-        <span class="line1">ALPAGUT AYKUT</span>
+        <span class="line1">ALPAGUT</span>
+        <span class="line1">AYKUT</span>
         <span class="line2">TÜZEMEN</span>
       </h1>
       <p class="hero-title">
@@ -2157,8 +2680,9 @@
   </div>
 
   <div class="next-level-wrap">
+    <div class="section-cta-msg" data-tr="BÖLÜM_01 TAMAMLANDI // +150 XP KAZANILDI" data-en="STAGE_01 COMPLETE // +150 XP EARNED">BÖLÜM_01 TAMAMLANDI // +150 XP KAZANILDI</div>
     <button class="next-level-btn" onclick="goNextLevel('skills')">
-      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 02 — BECERİLER" data-en="NEXT STAGE — STAGE 02 — SKILLS">SONRAKİ BÖLÜM — BÖLÜM 02 — BECERİLER</span>
+      <span data-tr="BÖLÜM 02 — BECERİLER" data-en="EXPLORE SKILLS — STAGE 02">BÖLÜM 02 — BECERİLER</span>
       <span class="next-level-icon">→</span>
     </button>
   </div>
@@ -2167,7 +2691,7 @@
 <!-- SKILLS -->
 <section id="skills" class="section-locked">
   <div class="skills-wrapper">
-    <div class="fade-up">
+    <div class="fade-up" style="text-align:left;">
       <div class="section-label" data-tr="02 — Beceriler" data-en="02 — Skills">02 — Beceriler</div>
       <h2 class="section-title" data-tr="Uzmanlık <span>Alanlarım</span>" data-en="Areas of <span>Expertise</span>">Uzmanlık <span>Alanlarım</span></h2>
     </div>
@@ -2224,121 +2748,159 @@
       </div>
 
       <!-- RIGHT: Category bars -->
-      <div class="skill-categories fade-up" style="transition-delay:0.15s">
+      <div class="skill-categories fade-up" style="transition-delay:0.2s">
 
-        <div class="skill-cat">
-          <div class="skill-cat-header">
-            <span class="skill-cat-name" data-tr="Motion" data-en="Motion">Motion</span>
-            <span class="skill-cat-pct">80%</span>
+        <div class="skill-two-col">
+
+          <!-- SOL: Yapay Zeka Araçları -->
+          <div class="skill-col">
+            <div class="skill-group-title">// YAPAY ZEKA ARAÇLARI <span style="color:rgba(255,107,53,0.4);font-size:9px;">95%</span></div>
+
+            <!-- Genel araçlar -->
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Higgsfield</span><span class="skill-cat-pct">93%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:93%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Freepik AI</span><span class="skill-cat-pct">91%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:91%"></div></div>
+            </div>
+
+            <!-- Görsel alt başlık -->
+            <div class="skill-sub-title">— Görsel</div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Midjourney</span><span class="skill-cat-pct">96%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:96%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Nanobanana Pro</span><span class="skill-cat-pct">92%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:92%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Seedream</span><span class="skill-cat-pct">90%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:90%"></div></div>
+            </div>
+
+            <!-- Video alt başlık -->
+            <div class="skill-sub-title">— Video</div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Kling</span><span class="skill-cat-pct">95%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:95%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Google Veo</span><span class="skill-cat-pct">93%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:93%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Seedance Pro</span><span class="skill-cat-pct">91%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:91%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Heygen</span><span class="skill-cat-pct">90%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:90%"></div></div>
+            </div>
           </div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:80%"></div></div>
-          <div class="skill-cat-tools">
-            <span class="skill-tool">After Effects</span>
-            <span class="skill-tool">Premier Pro</span>
+
+          <!-- SAĞ: Yazılım -->
+          <div class="skill-col">
+            <div class="skill-group-title">// YAZILIM</div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">After Effects</span><span class="skill-cat-pct">80%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:80%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Premiere Pro</span><span class="skill-cat-pct">70%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:70%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Photoshop</span><span class="skill-cat-pct">70%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:70%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Illustrator</span><span class="skill-cat-pct">70%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:70%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Unreal Engine 5</span><span class="skill-cat-pct">80%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:80%"></div></div>
+              <div class="skill-cat-tools"><span class="skill-tag">Level Design Eğitmeni</span></div>
+            </div>
           </div>
+
         </div>
 
-        <div class="skill-cat">
-          <div class="skill-cat-header">
-            <span class="skill-cat-name" data-tr="Yapay Zeka Video Üretimi" data-en="AI Video Production">Yapay Zeka Video Üretimi</span>
-            <span class="skill-cat-pct">95%</span>
-          </div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:95%"></div></div>
-          <div class="skill-cat-tools">
-            <span class="skill-tool">Kling</span>
-            <span class="skill-tool">Nanobanana Pro</span>
-            <span class="skill-tool">Higgsfield</span>
-            <span class="skill-tool">Google Veo 3.1</span>
-          </div>
-        </div>
-
-        <div class="skill-cat">
-          <div class="skill-cat-header">
-            <span class="skill-cat-name" data-tr="Level Designer" data-en="Level Designer">Level Designer</span>
-            <span class="skill-cat-pct">70%</span>
-          </div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:70%"></div></div>
-          <div class="skill-cat-tools">
-            <span class="skill-tool">Unreal Engine 5</span>
-          </div>
-        </div>
-
-        <div class="skill-cat">
-          <div class="skill-cat-header">
-            <span class="skill-cat-name" data-tr="Eğitim" data-en="Education">Eğitim</span>
-            <span class="skill-cat-pct">88%</span>
-          </div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:88%"></div></div>
-          <div class="skill-cat-tools">
-            <span class="skill-tool">Yapay Zeka Eğitimi</span>
-            <span class="skill-tool">Level Design Eğitimi</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="next-level-wrap">
-    <button class="next-level-btn" onclick="goNextLevel('videos')">
-      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 03 — ÇALIŞMALAR" data-en="NEXT STAGE — STAGE 03 — WORK">SONRAKİ BÖLÜM — BÖLÜM 03 — ÇALIŞMALAR</span>
-      <span class="next-level-icon">→</span>
-    </button>
-  </div>
-</section>
-
-<!-- VIDEOS / WORK -->
-<section id="videos" class="section-locked">
-  <div class="videos-wrapper">
-    <div class="fade-up">
-      <div class="section-label" data-tr="03 — Seçili Çalışmalar" data-en="03 — Selected Work">03 — Seçili Çalışmalar</div>
-      <h2 class="section-title" data-tr="<span>Projeler</span>" data-en="<span>Projects</span>"><span>Projeler</span></h2>
-    </div>
-
-    <!-- FILTER TABS -->
-    <div class="filter-bar fade-up">
-      <button class="filter-btn active" data-filter="all" data-tr="Tümü" data-en="All">Tümü</button>
-      <button class="filter-btn" data-filter="2d" data-tr="2D Animasyon" data-en="2D Animation">2D Animasyon</button>
-      <button class="filter-btn" data-filter="3d" data-tr="3D Animasyon" data-en="3D Animation">3D Animasyon</button>
-      <button class="filter-btn" data-filter="motion" data-tr="Motion Design" data-en="Motion Design">Motion Design</button>
-      <button class="filter-btn" data-filter="ai" data-tr="AI Video" data-en="AI Video">AI Video</button>
-      <button class="filter-btn" data-filter="kurumsal" data-tr="Kurumsal" data-en="Corporate">Kurumsal</button>
-      <button class="filter-btn" data-filter="karakter" data-tr="Karakter" data-en="Character">Karakter</button>
-    </div>
-
-    <div class="projects-grid" id="projects-grid">
-
-      <div class="project-card" data-cats="ai" style="max-width:720px;margin:0 auto;">
-        <div class="project-thumb-video" id="video-preveza" onclick="playVideo(this, 'lqkT4TmoRKM')">
-          <img src="preveza_thumb.jpg" alt="Canlanan Tarih Demo" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;">
-          <div class="yt-play-overlay">
-            <div class="yt-play-btn">
-              <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+        <!-- ALT: Dil -->
+        <div class="skill-lang-row">
+          <div class="skill-group-title">// DİL</div>
+          <div class="skill-lang-cols">
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">Türkçe</span><span class="skill-cat-pct">Ana Dil</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:100%"></div></div>
+            </div>
+            <div class="skill-cat">
+              <div class="skill-cat-header"><span class="skill-cat-name">İngilizce</span><span class="skill-cat-pct">B1</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:55%"></div></div>
+              <div class="skill-cat-tools"><span class="skill-tag">Intermediate</span></div>
             </div>
           </div>
         </div>
-        <div class="project-info">
-          <h3>Canlanan Tarih — Demo</h3>
-          <p data-tr="Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir." data-en="I created a demo video for a documentary series called Canlanan Tarih. All visuals, videos and editing belong to me.">Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir.</p>
-          <div class="project-tags">
-            <span class="tag">AI Video</span>
-          </div>
-        </div>
-      </div>
 
-    </div>
+      </div>
 
     
 
-  <div class="next-level-wrap">  <div class="next-level-wrap">
-    <button class="next-level-btn" onclick="goNextLevel('timeline')">
-      <span data-tr="SONRAKİ BÖLÜM — BÖLÜM 04 — DENEYİM" data-en="NEXT STAGE — STAGE 04 — EXPERIENCE">SONRAKİ BÖLÜM — BÖLÜM 04 — DENEYİM</span>
+  <div class="next-level-wrap">
+    <div class="section-cta-msg" data-tr="Projelerimi gördün! +250 XP ⚡ Son olarak kariyer yolculuğumu keşfet →" data-en="You've seen my projects! +250 XP ⚡ Finally, explore my career journey →">Projelerimi gördün! +250 XP ⚡ Son olarak kariyer yolculuğumu keşfet →</div>
+    <button class="next-level-btn" onclick="goNextLevel('videos')">
+      <span data-tr="BÖLÜM 03 — PROJELER" data-en="STAGE 03 — PROJECTS">BÖLÜM 03 — PROJELER</span>
       <span class="next-level-icon">→</span>
     </button>
   </div>
 </section>
 
 <!-- TIMELINE / EXPERIENCE -->
+<!-- ÇALIŞMALAR -->
+<section id="videos" class="section-locked">
+  <div class="videos-wrapper">
+    <div class="fade-up" style="text-align:left;">
+      <div class="section-label" data-tr="03 — Seçili Çalışmalar" data-en="03 — Selected Work">03 — Seçili Çalışmalar</div>
+      <h2 class="section-title" data-tr="<span>Projeler</span>" data-en="<span>Projects</span>"><span>Projeler</span></h2>
+    </div>
+
+    <div class="filter-bar fade-up">
+      <button class="filter-btn active" data-filter="all" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="filter-btn" data-filter="ai" data-tr="AI Video" data-en="AI Video">AI Video</button>
+    </div>
+
+    <div class="projects-grid" id="projects-grid">
+      <div class="project-card" data-cats="ai" style="max-width:720px;margin:0 auto;">
+        <div class="project-thumb-video" onclick="window.open('https://youtu.be/lqkT4TmoRKM','_blank')">
+          <img src="https://raw.githubusercontent.com/aykuttuzemen/portfolio/main/thumb1.jpg" alt="Canlanan Tarih" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+          <div class="yt-play-overlay">
+            <div class="yt-play-btn">
+              <svg viewBox="0 0 68 48" width="56" height="40"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+            </div>
+            <div class="yt-hint" data-tr="YouTube'da izle →" data-en="Watch on YouTube →">YouTube'da izle →</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Canlanan Tarih — Demo</h3>
+          <p data-tr="Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir." data-en="I created a demo video for a documentary series called Canlanan Tarih. All visuals, videos and editing belong to me.">Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir.</p>
+          <div class="project-tags"><span class="tag">AI Video</span></div>
+        </div>
+      </div>
+    </div>
+
+  <div class="next-level-wrap" style="align-items:flex-start;">
+    <div class="section-cta-msg" data-tr="BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI" data-en="STAGE_03 COMPLETE // +250 XP EARNED">BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI</div>
+    <button class="next-level-btn" onclick="goNextLevel('timeline')">
+      <span data-tr="BÖLÜM 04 — KARİYER" data-en="CAREER JOURNEY — STAGE 04">BÖLÜM 04 — KARİYER</span>
+      <span class="next-level-icon">→</span>
+    </button>
+  </div>
+  </div>
+</section>
+
 <section id="timeline" class="section-locked">
   <div class="timeline-wrapper">
     <div class="fade-up">
@@ -2496,8 +3058,8 @@
     <div class="game-over-screen">
       <div class="go-scanlines"></div>
       <div class="go-content">
-        <div class="go-title" data-tr="OYUN BİTTİ" data-en="GAME OVER">OYUN BİTTİ</div>
-        <div class="go-sub" data-tr="Portfolyoyu tamamladınız." data-en="You completed the portfolio.">Portfolyoyu tamamladınız.</div>
+        <div class="go-title" id="go-title" data-tr="OYUN BİTTİ" data-en="GAME OVER">OYUN BİTTİ</div>
+        <div class="go-sub" id="go-sub" data-tr="Portfolyoyu tamamladınız." data-en="You completed the portfolio.">Portfolyoyu tamamladınız.</div>
         <div class="go-score">
           <div class="go-score-item">
             <span class="go-score-label" data-tr="SÜRE" data-en="TIME">SÜRE</span>
@@ -2550,10 +3112,10 @@
         <!-- Unlocked CTA -->
         <a href="#" onclick="window.open('card.html','_blank');return false;" class="go-cta go-cta-unlocked" id="go-cta-unlocked" style="display:none;">
           <span class="go-cta-bracket">&gt;&gt;</span>
-          <span data-tr="DEVAM ETMEK İÇİN İLETİŞİME GEÇ" data-en="INSERT COIN TO CONTINUE">DEVAM ETMEK İÇİN İLETİŞİME GEÇ</span>
+          <span data-tr="İLETİŞİM BİLGİLERİNE ULAŞ →" data-en="ACCESS CONTACT INFO →">İLETİŞİM BİLGİLERİNE ULAŞ →</span>
           <span class="go-cta-blink">_</span>
         </a>
-        <div class="go-copyright">© 2025 ALPAGUT AYKUT TÜZEMEN</div>
+        <div class="go-copyright">© 2025 AYKUT TÜZEMEN</div>
       </div>
     </div>
   </div>
@@ -2729,7 +3291,42 @@
 
   // Start game
   document.getElementById('splash-btn').addEventListener('click', function() {
-    document.getElementById('splash').classList.add('hide');
+    var splashEl = document.getElementById('splash');
+    var splashBtn = document.getElementById('splash-btn');
+    var loadingEl = document.getElementById('splash-loading');
+    var barFill = document.getElementById('sl-bar-fill');
+    var statusEl = document.getElementById('sl-status');
+    var pctEl = document.getElementById('sl-pct');
+
+    // Hide button, show loading
+    splashBtn.style.display = 'none';
+    loadingEl.style.display = 'flex';
+
+    var steps = [
+      { pct: 15, status: 'LOADING ASSETS...' },
+      { pct: 32, status: 'BUILDING TIMELINE...' },
+      { pct: 55, status: 'LOADING SKILLS...' },
+      { pct: 71, status: 'IMPORTING PROJECTS...' },
+      { pct: 88, status: 'INITIALIZING HUD...' },
+      { pct: 100, status: 'READY.' },
+    ];
+
+    var i = 0;
+    function runStep() {
+      if (i >= steps.length) {
+        setTimeout(function() {
+          splashEl.classList.add('hide');
+          setTimeout(function() { splashEl.style.display = 'none'; }, 1000);
+        }, 400);
+        return;
+      }
+      var step = steps[i++];
+      barFill.style.width = step.pct + '%';
+      statusEl.textContent = step.status;
+      pctEl.textContent = step.pct + '%';
+      setTimeout(runStep, i === steps.length ? 300 : Math.random() * 80 + 60);
+    }
+    runStep();
     document.getElementById('mission-hud').classList.add('visible');
     gameStarted = true;
 
@@ -2910,19 +3507,29 @@
 
   // FINISH GAME
   function finishGame() {
-    // Mark all sections done in HUD + award final XP
+    // Only award XP for sections that were properly unlocked (not skipped)
+    // Don't auto-award skipped sections
     document.querySelectorAll('.mission-item').forEach(function(item) {
-      if (!item.classList.contains('done')) {
-        item.classList.remove('active');
-        item.classList.add('done');
-        awardXP(item);
+      if (item.classList.contains('done')) {
+        // already awarded
       }
     });
     // Update stage tracker count to 4
     var countEl = document.getElementById('completed-count');
     var rankEl = document.getElementById('player-rank');
     if (countEl) countEl.textContent = '4';
-    if (rankEl) rankEl.textContent = 'S+';
+    // Calculate score percentage
+    var pct = Math.round((currentHudXP / totalXPMax) * 100);
+    var rank = pct >= 100 ? 'S+' : pct >= 75 ? 'A' : pct >= 50 ? 'B' : 'C';
+    if (rankEl) rankEl.textContent = rank;
+    // Show score message
+    var scoreMsg = document.getElementById('go-score-msg');
+    if (scoreMsg) {
+      if (pct >= 100) scoreMsg.textContent = 'Mükemmel! Beni tam olarak tanıdın! 🏆';
+      else if (pct >= 75) scoreMsg.textContent = 'Beni ' + pct + '% tanıdın. Bazı bölümleri atladın.';
+      else if (pct >= 50) scoreMsg.textContent = 'Beni ' + pct + '% tanıdın. Daha çok keşfedebilirdin!';
+      else scoreMsg.textContent = 'Beni sadece ' + pct + '% tanıdın. Geri dön, keşfet! 👀';
+    }
     // Update stage items in footer
     document.querySelectorAll('.go-stage').forEach(function(s) {
       s.classList.add('done');
@@ -2933,9 +3540,37 @@
     var unlocked = document.getElementById('go-cta-unlocked');
     if (locked) locked.style.display = 'none';
     if (unlocked) unlocked.style.display = 'inline-flex';
-    // Scroll to footer
+    // Check if all 4 sections completed
+    var allDone = unlockedSections.indexOf('about') !== -1 &&
+                  unlockedSections.indexOf('skills') !== -1 &&
+                  unlockedSections.indexOf('videos') !== -1 &&
+                  unlockedSections.indexOf('timeline') !== -1;
+
+    // Update title based on completion
+    var titleEl = document.getElementById('go-title');
+    var subEl = document.getElementById('go-sub');
+    if (titleEl && allDone) {
+      titleEl.classList.add('congrats');
+      titleEl.setAttribute('data-tr', 'TEBRİKLER');
+      titleEl.textContent = 'TEBRİKLER';
+      // Add subtitle
+      var sub = document.createElement('div');
+      sub.className = 'go-subtitle-congrats';
+      sub.setAttribute('data-tr', '// TÜM BÖLÜMLER TAMAMLANDI — TAM PUAN');
+      sub.textContent = '// TÜM BÖLÜMLER TAMAMLANDI — TAM PUAN';
+      titleEl.parentNode.insertBefore(sub, titleEl.nextSibling);
+    } else if (titleEl) {
+      titleEl.textContent = 'OYUN BİTTİ';
+    }
+    if (subEl && allDone) {
+      subEl.textContent = 'Portfolyoyu eksiksiz tamamladın. Beni tam olarak tanıdın!';
+    }
+
+    // Show + scroll to footer
+    var footer = document.querySelector('footer');
+    footer.style.display = 'block';
     setTimeout(function() {
-      document.querySelector('footer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
   }
 
