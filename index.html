@@ -1714,8 +1714,8 @@
   }
   .mamaplus-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
   .mamaplus-video-card {
     position: relative;
@@ -1772,7 +1772,7 @@
   }
 
   @media (max-width: 600px) {
-    .mamaplus-grid { grid-template-columns: 1fr; }
+    .mamaplus-grid { grid-template-columns: repeat(2, 1fr); }
     .mamaplus-modal-inner { padding: 40px 16px 60px; }
     .mamaplus-modal-header { flex-direction: column; gap: 16px; }
   }
@@ -3415,12 +3415,21 @@
 
   // MAMAPLUS GALLERY
   function openMamaplusGallery() {
-    document.getElementById('mamaplus-modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
+    var modal = document.getElementById('mamaplus-modal');
+    if (modal) {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
   }
   function closeMamaplusGallery() {
-    document.getElementById('mamaplus-modal').classList.remove('active');
-    document.body.style.overflow = '';
+    var modal = document.getElementById('mamaplus-modal');
+    if (modal) {
+      modal.classList.remove('active');
+      // Only restore scroll if video modal isn't about to open
+      if (!document.getElementById('video-modal').classList.contains('active')) {
+        document.body.style.overflow = '';
+      }
+    }
   }
   var mamaplusModal = document.getElementById('mamaplus-modal');
   if (mamaplusModal) {
@@ -4023,37 +4032,42 @@
       <button class="mamaplus-close" onclick="closeMamaplusGallery()">✕ <span data-tr="KAPAT" data-en="CLOSE">KAPAT</span></button>
     </div>
     <div class="mamaplus-grid" id="mamaplus-grid">
-      <!-- Placeholder videolar — YouTube ID'lerini buraya ekle -->
-      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('MAMAPLUS_VID_1')},300)">
-        <div class="thumb">
-          <img src="https://img.youtube.com/vi/MAMAPLUS_VID_1/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/MAMAPLUS_VID_1/hqdefault.jpg'" alt="Mamaplus 1">
-          <div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div>
-        </div>
-        <div class="card-info">
-          <h4>Video Başlığı 1</h4>
-          <p>Açıklama</p>
-        </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('uUYp6nN33dQ')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/uUYp6nN33dQ/hqdefault.jpg" alt="Mamaplus 1"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #1</h4></div>
       </div>
-      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('MAMAPLUS_VID_2')},300)">
-        <div class="thumb">
-          <img src="https://img.youtube.com/vi/MAMAPLUS_VID_2/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/MAMAPLUS_VID_2/hqdefault.jpg'" alt="Mamaplus 2">
-          <div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div>
-        </div>
-        <div class="card-info">
-          <h4>Video Başlığı 2</h4>
-          <p>Açıklama</p>
-        </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('pYbxTS7l-ms')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/pYbxTS7l-ms/hqdefault.jpg" alt="Mamaplus 2"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #2</h4></div>
       </div>
-      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('MAMAPLUS_VID_3')},300)">
-        <div class="thumb">
-          <img src="https://img.youtube.com/vi/MAMAPLUS_VID_3/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/MAMAPLUS_VID_3/hqdefault.jpg'" alt="Mamaplus 3">
-          <div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div>
-        </div>
-        <div class="card-info">
-          <h4>Video Başlığı 3</h4>
-          <p>Açıklama</p>
-        </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('BQPG54yAjz0')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/BQPG54yAjz0/hqdefault.jpg" alt="Mamaplus 3"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #3</h4></div>
       </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('RxrYojQcN5Y')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/RxrYojQcN5Y/hqdefault.jpg" alt="Mamaplus 4"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #4</h4></div>
+      </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('jQLRy3LBnbI')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/jQLRy3LBnbI/hqdefault.jpg" alt="Mamaplus 5"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #5</h4></div>
+      </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('cwMSekWYSDg')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/cwMSekWYSDg/hqdefault.jpg" alt="Mamaplus 6"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #6</h4></div>
+      </div>
+
+      <div class="mamaplus-video-card" onclick="closeMamaplusGallery();setTimeout(function(){openVideo('asfpOdXkRD0')},300)">
+        <div class="thumb"><img src="https://img.youtube.com/vi/asfpOdXkRD0/hqdefault.jpg" alt="Mamaplus 7"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
+        <div class="card-info"><h4>Mamaplus #7</h4></div>
+      </div>
+
     </div>
   </div>
 </div>
