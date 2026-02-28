@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="frame-src https://www.youtube.com https://www.youtube-nocookie.com 'self';">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aykut Tüzemen — Motion Designer & AI Creator</title>
@@ -105,7 +106,7 @@
   }
   .splash-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(60px, 10vw, 120px);
+    font-size: clamp(40px, 7vw, 90px);
     letter-spacing: 2px;
     line-height: 0.95;
     animation: fadeUp 0.6s 0.5s both;
@@ -116,8 +117,7 @@
   }
   .splash-title .line2 {
     display: block;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
+    font-family: 'Bebas Neue', sans-serif;
     background: var(--grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -916,8 +916,7 @@
   .hero-name .line1 { display: block; }
   .hero-name .line2 {
     display: block;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
+    font-family: 'Bebas Neue', sans-serif;
     background: var(--grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -2442,7 +2441,23 @@
     .timeline-col:last-child { margin-left: 0; padding-left: 28px; }
     #about, #skills, #videos, #timeline { padding: 60px 20px; }
     .section-title { font-size: clamp(32px, 10vw, 60px); }
-    .mission-hud { top: 8px; right: 8px; padding: 8px 10px; }
+    .mission-hud {
+      top: auto;
+      bottom: 12px;
+      right: 8px;
+      left: 8px;
+      min-width: unset;
+      padding: 8px 12px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mission-hud-title { display: none; }
+    .mission-item { font-size: 9px; letter-spacing: 1px; padding: 4px 6px; }
+    .mission-hud-top { flex-direction: row; gap: 8px; align-items: center; width: 100%; }
+    .player-xp-bar { display: none; }
     .mission-hud-title { display: none; }
     .about-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .stat-card { padding: 14px 10px; }
@@ -2472,6 +2487,92 @@
     .about-body { gap: 30px; }
     .timeline-col { padding-left: 20px; }
   }
+
+  @media (max-width: 768px) {
+    .mission-hud {
+      top: auto;
+      bottom: 12px;
+      right: 8px;
+      left: 8px;
+      min-width: unset;
+      padding: 8px 12px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      align-items: center;
+    }
+    .mission-hud-title { display: none; }
+    .mission-hud-top { flex-direction: row; gap: 8px; align-items: center; }
+    .player-xp-bar { width: 60px; }
+    .mission-item { font-size: 9px; letter-spacing: 1px; padding: 3px 0; }
+    .mission-item-xp { display: none; }
+    .lvl-badge { font-size: 10px; }
+  }
+
+  .u-umlaut {
+    position: relative;
+    display: inline-block;
+    -webkit-text-fill-color: transparent;
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .u-umlaut::before {
+    content: '··';
+    position: absolute;
+    top: 0em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.3em;
+    line-height: 0;
+    letter-spacing: 2px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Video Modal */
+  .video-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.92);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  .video-modal.active { display: flex; }
+  .video-modal-inner {
+    position: relative;
+    width: 90vw;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+    background: #000;
+    border: 1px solid rgba(255,107,53,0.3);
+    box-shadow: 0 0 60px rgba(255,107,53,0.2);
+  }
+  .video-modal-inner iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .video-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+  }
+  .video-modal-close:hover { color: var(--accent1); }
 </style>
 </head>
 <body>
@@ -2484,7 +2585,7 @@
     <div class="splash-label">— Portfolyo v1.0 —</div>
     <div class="splash-title">
       <span class="line1">ALPAGUT AYKUT</span>
-      <span class="line2">TÜZEMEN</span>
+      <span class="line2">T<span class="u-umlaut">U</span>ZEMEN</span>
     </div>
     <div class="splash-roles">
       <span class="splash-role">AI ARTIST &amp; VIDEO EDITOR</span>
@@ -2567,7 +2668,7 @@
       <h1 class="hero-name">
         <span class="line1">ALPAGUT</span>
         <span class="line1">AYKUT</span>
-        <span class="line2">TÜZEMEN</span>
+        <span class="line2">T<span class="u-umlaut">U</span>ZEMEN</span>
       </h1>
       <p class="hero-title">
         <em>AI Artist & Video Editor</em> — Motion Designer
@@ -2873,24 +2974,63 @@
     </div>
 
     <div class="projects-grid" id="projects-grid">
-      <div class="project-card" data-cats="ai" style="max-width:720px;margin:0 auto;">
-        <div class="project-thumb-video" onclick="window.open('https://youtu.be/lqkT4TmoRKM','_blank')">
-          <img src="https://raw.githubusercontent.com/aykuttuzemen/portfolio/main/thumb1.jpg" alt="Canlanan Tarih" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+
+      <div class="project-card" data-cats="ai" onclick="openVideo('lqkT4TmoRKM')">
+        <div class="project-thumb-video">
+          <img src="https://raw.githubusercontent.com/aykuttuzemen/portfolio/main/thumb1.jpg" alt="Canlanan Tarih">
           <div class="yt-play-overlay">
             <div class="yt-play-btn">
-              <svg viewBox="0 0 68 48" width="56" height="40"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+              <svg viewBox="0 0 68 48" width="40" height="28"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
             </div>
-            <div class="yt-hint" data-tr="YouTube'da izle →" data-en="Watch on YouTube →">YouTube'da izle →</div>
           </div>
         </div>
         <div class="project-info">
           <h3>Canlanan Tarih — Demo</h3>
-          <p data-tr="Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir." data-en="I created a demo video for a documentary series called Canlanan Tarih. All visuals, videos and editing belong to me.">Canlanan Tarih isimli belgesel serisi için demo video hazırladım. Görseller, videolar ve kurgu tamamen bana aittir.</p>
+          <p>AI destekli belgesel serisi demo videosu.</p>
           <div class="project-tags"><span class="tag">AI Video</span></div>
         </div>
       </div>
-    </div>
 
+      <div class="project-card" data-cats="ai">
+        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
+          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
+            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Proje 2</h3>
+          <p>Yakında eklenecek.</p>
+          <div class="project-tags"><span class="tag">AI Video</span></div>
+        </div>
+      </div>
+
+      <div class="project-card" data-cats="ai">
+        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
+          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
+            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Proje 3</h3>
+          <p>Yakında eklenecek.</p>
+          <div class="project-tags"><span class="tag">AI Video</span></div>
+        </div>
+      </div>
+
+      <div class="project-card" data-cats="ai">
+        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
+          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
+            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Proje 4</h3>
+          <p>Yakında eklenecek.</p>
+          <div class="project-tags"><span class="tag">AI Video</span></div>
+        </div>
+      </div>
+
+    </div>
   <div class="next-level-wrap" style="align-items:flex-start;">
     <div class="section-cta-msg" data-tr="BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI" data-en="STAGE_03 COMPLETE // +250 XP EARNED">BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI</div>
     <button class="next-level-btn" onclick="goNextLevel('timeline')">
@@ -3121,7 +3261,27 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+  function openVideo(youtubeId) {
+    var modal = document.getElementById('video-modal');
+    var iframe = document.getElementById('video-modal-iframe');
+    iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoModal(e) {
+    if (e && e.target !== document.getElementById('video-modal') && !e.target.classList.contains('video-modal-close')) return;
+    var modal = document.getElementById('video-modal');
+    var iframe = document.getElementById('video-modal-iframe');
+    modal.classList.remove('active');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeVideoModal({target: document.getElementById('video-modal')});
+  });
+</script><script>
   // CURSOR — clean implementation
   var cursor = document.getElementById('cursor');
   var ring   = document.getElementById('cursor-ring');
@@ -3376,7 +3536,7 @@
 
   // PLAY VIDEO
   function playVideo(el, videoId) {
-    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>';
+    el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>';
     el.onclick = null;
   }
 
@@ -3457,7 +3617,7 @@
   function loadYT() {
     var wrap = document.getElementById('yt-thumb-wrap');
     if (!wrap) return;
-    wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/lqkT4TmoRKM?autoplay=1" title="Canlanan Tarih Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;position:absolute;top:0;left:0;border:none;"></iframe>';
+    wrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/lqkT4TmoRKM?autoplay=1" title="Canlanan Tarih Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;position:absolute;top:0;left:0;border:none;"></iframe>';
     wrap.style.cursor = 'default';
   }
 
@@ -3677,5 +3837,13 @@
     });
   });
 </script>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal" id="video-modal" onclick="closeVideoModal(event)">
+  <div class="video-modal-inner" id="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoModal()">✕ KAPAT</button>
+    <iframe id="video-modal-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+</div>
 </body>
 </html>
