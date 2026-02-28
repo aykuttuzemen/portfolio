@@ -56,21 +56,6 @@
     0%   { opacity: 0; }
     100% { opacity: 1; }
   }
-  
-    15%  { opacity: 1; transform: scale(1.01); filter: brightness(2) contrast(1.3) saturate(0); }
-    20%  { opacity: 1; transform: scale(1); filter: none; }
-    22%  { opacity: 0.7; transform: scale(1) translateY(-2px); filter: brightness(1.5); }
-    24%  { opacity: 1; transform: scale(1); filter: none; }
-    60%  { opacity: 1; transform: scale(1) translateY(0); filter: none; }
-    100% { opacity: 0; transform: scale(1.06) translateY(-20px); filter: blur(10px) brightness(2); }
-  }
-    20%  { opacity: 1; transform: scale(1); filter: brightness(1.5) contrast(1.2); }
-    25%  { opacity: 0.8; transform: scale(1.01); filter: brightness(3) saturate(0); }
-    30%  { opacity: 1; transform: scale(1); filter: none; }
-    50%  { opacity: 1; transform: scale(1); filter: none; }
-    70%  { opacity: 0; transform: scale(1.04) translateY(-8px); filter: blur(8px) brightness(2); }
-    100% { opacity: 0; transform: scale(1.08) translateY(-16px); visibility: hidden; filter: blur(12px); }
-  }
   .splash-scan {
     position: absolute;
     inset: 0;
@@ -396,6 +381,8 @@
     align-items: flex-start;
     gap: 16px;
     padding: 40px 48px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
   }
@@ -1170,8 +1157,6 @@
   }
 
   /* SKILLS */
-  
-  /* SKILLS */
   #skills { padding: 100px 0; }
 
   .skills-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; width: 100%; box-sizing: border-box; }
@@ -1203,14 +1188,6 @@
     gap: 60px;
     margin-top: 60px;
     width: 100%;
-  }
-  .skill-orb-wrap {
-    position: relative;
-    width: 420px;
-    height: 420px;
-    aspect-ratio: 1;
-    justify-self: center;
-    flex-shrink: 0;
   }
   .skill-categories {
     width: 100%;
@@ -1326,25 +1303,6 @@
   }
 
   /* Skill categories — right side */
-
-
-  .skill-sub-title {
-    font-family: 'Courier New', monospace;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: rgba(255,107,53,0.35);
-    text-transform: uppercase;
-    margin: 14px 0 6px;
-    padding-left: 2px;
-  }
-  .skill-group-title {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(255,107,53,0.5);
-    margin-bottom: 16px;
-    margin-top: 8px;
-  }
   .skill-categories { display: flex; flex-direction: column; gap: 28px; }
   .skills-layout > .skill-categories { justify-self: end; width: 100%; max-width: 520px; margin-left: auto; }
 
@@ -1411,8 +1369,17 @@
     background: linear-gradient(135deg, #0d0d0d, #1a0a00);
     overflow: hidden;
   }
-  .project-thumb-video:hover .yt-play-btn {
-    transform: scale(1.1);
+  .project-thumb-video img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.4s;
+  }
+  .project-thumb-video:hover img {
+    transform: scale(1.05);
   }
   .yt-play-overlay {
     position: absolute;
@@ -1421,15 +1388,39 @@
     align-items: center;
     justify-content: center;
     background: rgba(0,0,0,0.3);
-    transition: background 0.3s;
+    transition: background 0.3s, opacity 0.3s;
+    z-index: 2;
   }
   .project-thumb-video:hover .yt-play-overlay {
     background: rgba(0,0,0,0.15);
   }
   .yt-play-btn {
-    transition: transform 0.2s;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    transition: transform 0.3s;
+    filter: drop-shadow(0 2px 12px rgba(0,0,0,0.5));
   }
+  .project-card:hover .yt-play-btn { transform: scale(1.15); }
+
+  /* Hover video preview iframe */
+  .hover-preview {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .hover-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .project-card.previewing .hover-preview {
+    opacity: 1;
+  }
+  .project-card.previewing .yt-play-overlay {
+    opacity: 0;
+  }
+
   /* FILTER BAR */
   .filter-bar {
     display: flex;
@@ -1472,8 +1463,14 @@
     background: rgba(255,107,53,0.06);
   }
   .filter-btn.active::after { transform: scaleX(1); }
+  .filter-count {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    color: rgba(255,107,53,0.5);
+    margin-left: 6px;
+  }
 
-  /* Project card filter states */
+  /* Project card base */
   .project-card {
     position: relative;
     border-radius: 4px;
@@ -1481,12 +1478,12 @@
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,107,53,0.1);
     cursor: pointer;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    font-size: 11px;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
   }
   .project-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(255,107,53,0.3);
+    border-color: rgba(255,107,53,0.35);
+    box-shadow: 0 12px 40px rgba(255,107,53,0.08);
   }
   .project-card.hidden {
     opacity: 0;
@@ -1509,72 +1506,93 @@
 
   .videos-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
 
+  /* === FEATURED HERO PROJECT === */
+  .featured-project {
+    margin-bottom: 32px;
+  }
+  .featured-project .project-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid rgba(255,107,53,0.2);
+    background: rgba(255,107,53,0.02);
+  }
+  .featured-project .project-card:hover {
+    border-color: rgba(255,107,53,0.5);
+    box-shadow: 0 16px 60px rgba(255,107,53,0.12);
+    transform: translateY(-4px);
+  }
+  .featured-project .project-thumb-video {
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+  .featured-project .project-info {
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--accent1);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .featured-badge::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent1);
+    box-shadow: 0 0 6px var(--accent1);
+    animation: pulse 2s infinite;
+  }
+  .featured-project .project-info h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .featured-project .project-info p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    display: block;
+    -webkit-line-clamp: unset;
+  }
+
+  /* === PROJECTS GRID (smaller cards) === */
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 24px;
-    max-width: 1200px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 0;
   }
 
-  /* project-card defined in filter section */
-
-  .project-thumb {
-    aspect-ratio: 16/9;
-    background: linear-gradient(135deg, #1a1a1a, #222);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .projects-grid .project-info {
+    padding: 14px 16px;
   }
-
-  .project-thumb .play-btn {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--grad);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    transition: transform 0.3s;
-    z-index: 2;
-  }
-  .project-card:hover .play-btn { transform: scale(1.15); }
-
-  .project-thumb-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 40px 16px 16px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .project-info {
-    padding: 8px 10px;
-  }
-  .project-info h3 {
+  .projects-grid .project-info h3 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     letter-spacing: 1px;
     color: var(--text);
-    margin-bottom: 3px;
+    margin-bottom: 4px;
   }
-  .project-info p {
-    font-size: 9px;
+  .projects-grid .project-info p {
+    font-size: 11px;
     color: var(--muted);
-    line-height: 1.4;
-    margin-bottom: 6px;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    line-height: 1.5;
+    margin-bottom: 0;
   }
   .project-tags {
-    margin-top: 12px;
+    margin-top: 10px;
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
@@ -1585,14 +1603,41 @@
     letter-spacing: 1px;
     color: var(--accent1);
     border: 1px solid rgba(255,107,53,0.3);
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 2px;
     text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .project-card:hover .tag {
+    border-color: rgba(255,107,53,0.5);
+    background: rgba(255,107,53,0.06);
   }
 
-  .yt-cta {
-    margin-top: 40px;
-    text-align: center;
+    
+  }
+
+  /* Section total counter */
+  .section-counter {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 24px;
+  }
+  .section-counter span {
+    color: var(--accent1);
+  }
+
+  /* Responsive: featured + grid */
+  @media (max-width: 1024px) {
+    .featured-project .project-card { grid-template-columns: 1fr; }
+    .featured-project .project-thumb-video { min-height: 240px; aspect-ratio: 16/9; }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .featured-project .project-info { padding: 20px; }
+    .featured-project .project-info h3 { font-size: 24px; }
   }
 
 
@@ -1851,248 +1896,6 @@
     border-left: 2px solid #4ade80;
     background: rgba(74,222,128,0.05);
     display: inline-block;
-  }
-  /* Game over score msg */
-  .go-score-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    text-align: center;
-    margin-bottom: 24px;
-    min-height: 24px;
-    letter-spacing: 1px;
-  }
-
-  .go-title.congrats {
-    animation: none;
-    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: congratsShimmer 2s ease infinite;
-  }
-  @keyframes congratsShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .go-subtitle-congrats {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    color: #4ade80;
-    letter-spacing: 3px;
-    margin-top: 8px;
-    opacity: 0;
-    animation: fadeInUp 0.8s 0.5s forwards;
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  /* CONTACT */
-  #contac }
-  }
-
-
-  .splash-how {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 28px 0 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .splash-how-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-  }
-  .splash-how-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--accent1);
-  }
-  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
-  .splash-sub {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.25);
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  /* Section CTA message */
-  .section-cta-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    max-width: 600px;
-  }
-  /* Game over score msg */
-  .go-score-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    text-align: center;
-    margin-bottom: 24px;
-    min-height: 24px;
-    letter-spacing: 1px;
-  }
-
-  .go-title.congrats {
-    animation: none;
-    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: congratsShimmer 2s ease infinite;
-  }
-  @keyframes congratsShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .go-subtitle-congrats {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    color: #4ade80;
-    letter-spacing: 3px;
-    margin-top: 8px;
-    opacity: 0;
-    animation: fadeInUp 0.8s 0.5s forwards;
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  /* CONTACT */
-  #contac }
-  }
-
-
-  .splash-how {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 28px 0 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .splash-how-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-  }
-  .splash-how-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--accent1);
-  }
-  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
-  .splash-sub {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.25);
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  /* Section CTA message */
-  .section-cta-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    max-width: 600px;
-  }
-  /* Game over score msg */
-  .go-score-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    text-align: center;
-    margin-bottom: 24px;
-    min-height: 24px;
-    letter-spacing: 1px;
-  }
-
-  .go-title.congrats {
-    animation: none;
-    background: linear-gradient(135deg, #4ade80, #22d3ee, #4ade80);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: congratsShimmer 2s ease infinite;
-  }
-  @keyframes congratsShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .go-subtitle-congrats {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    color: #4ade80;
-    letter-spacing: 3px;
-    margin-top: 8px;
-    opacity: 0;
-    animation: fadeInUp 0.8s 0.5s forwards;
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  /* CONTACT */
-  #contac; }
-  }
-
-  .splash-how {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 28px 0 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .splash-how-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-  }
-  .splash-how-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--accent1);
-  }
-  .splash-how-arrow { color: rgba(255,107,53,0.3); font-size: 18px; }
-  .splash-sub {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.25);
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  /* Section CTA message */
-  .section-cta-msg {
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    max-width: 600px;
   }
   /* Game over score msg */
   .go-score-msg {
@@ -2405,20 +2208,6 @@
     transform: translateY(0);
   }
 
-  /* MOBILE */
-  @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
-  
-    section { padding: 72px 24px; }
-    #hero { padding: 100px 24px 80px; }
-    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-    .hero-visual { max-width: 280px; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-stats { grid-template-columns: 1fr 1fr; }
-      .skill-orb-wrap { max-width: 300px; }
-    footer { flex-direction: column; gap: 8px; text-align: center; }
-  }
-
   /* Highlight line for sections */
   .highlight-bar {
     display: inline-flex;
@@ -2431,21 +2220,22 @@
     background: var(--grad);
   }
 
+  /* MOBILE */
   @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    section { padding: 72px 24px; }
+    #hero { padding: 100px 24px 80px; }
     .hero-inner { grid-template-columns: 1fr; text-align: center; padding: 40px 24px; gap: 40px; }
-    .hero-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(64px, 10vw, 130px);
-    line-height: 0.9;
-    letter-spacing: 2px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
+    .hero-visual { max-width: 280px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-body { grid-template-columns: 1fr; }
     .about-divider { display: none; }
-      .skill-orb-wrap { width: 280px; height: 280px; margin: 0 auto; }
+    .about-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 14px 10px; }
+    .stat-num { font-size: 28px; }
+    .skill-orb-wrap { width: 280px; height: 280px; margin: 0 auto; }
     .skill-categories { max-width: 100%; }
-    .timeline-columns { flex-direction: column; }
+    .timeline-columns { grid-template-columns: 1fr; flex-direction: column; }
     .timeline-col:last-child { margin-left: 0; padding-left: 28px; }
     #about, #skills, #videos, #timeline { padding: 60px 20px; }
     .section-title { font-size: clamp(32px, 10vw, 60px); }
@@ -2458,7 +2248,7 @@
       padding: 8px 12px;
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 6px 12px;
       align-items: center;
       justify-content: space-between;
     }
@@ -2466,57 +2256,39 @@
     .mission-item { font-size: 9px; letter-spacing: 1px; padding: 4px 6px; }
     .mission-hud-top { flex-direction: row; gap: 8px; align-items: center; width: 100%; }
     .player-xp-bar { display: none; }
-    .mission-hud-title { display: none; }
-    .about-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .stat-card { padding: 14px 10px; }
-    .stat-num { font-size: 28px; }
-    .next-level-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 40px 48px 20px;
-    width: 100%;
-    box-sizing: border-box;
-  }
+    .mission-item-xp { display: none; }
+    .next-level-wrap { padding: 40px 0 20px; }
     .section-cta-msg { font-size: 11px; }
     .terminal-box { min-height: 200px; }
     .go-stats { grid-template-columns: 1fr 1fr; }
     .splash-how { gap: 8px; }
     .splash-how-arrow { display: none; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+    /* All wrapper paddings reset — section padding handles alignment */
+    .about-container, .skills-wrapper, .videos-wrapper, .timeline-wrapper { padding: 0; }
+    .featured-project .project-card { grid-template-columns: 1fr; }
+    .featured-project .project-thumb-video { min-height: auto; aspect-ratio: 16/9; }
+    .featured-project .project-info { padding: 20px; }
+    .featured-project .project-info h3 { font-size: 22px; }
+    .featured-project .project-info p { font-size: 13px; }
+    .projects-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .filter-bar { gap: 6px; }
+    .filter-btn { padding: 6px 14px; font-size: 11px; letter-spacing: 1px; }
+
+    .skill-two-col { grid-template-columns: 1fr; gap: 24px; }
+    .skill-lang-cols { grid-template-columns: 1fr; gap: 16px; }
   }
   @media (max-width: 480px) {
-    .hero-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(64px, 10vw, 130px);
-    line-height: 0.9;
-    letter-spacing: 2px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
     .about-body { gap: 30px; }
     .timeline-col { padding-left: 20px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .featured-project .project-info h3 { font-size: 20px; }
   }
 
-  @media (max-width: 768px) {
-    .mission-hud {
-      top: auto;
-      bottom: 12px;
-      right: 8px;
-      left: 8px;
-      min-width: unset;
-      padding: 8px 12px;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 6px 12px;
-      align-items: center;
-    }
-    .mission-hud-title { display: none; }
-    .mission-hud-top { flex-direction: row; gap: 8px; align-items: center; }
-    .player-xp-bar { width: 60px; }
-    .mission-item { font-size: 9px; letter-spacing: 1px; padding: 3px 0; }
-    .mission-item-xp { display: none; }
-    .lvl-badge { font-size: 10px; }
+  /* Disable custom cursor on touch devices */
+  @media (hover: none), (pointer: coarse) {
+    *, *::before, *::after { cursor: auto !important; }
+    #cursor, #cursor-ring { display: none !important; }
   }
 
   .u-umlaut {
@@ -2542,47 +2314,165 @@
     background-clip: text;
   }
 
-  /* Video Modal */
+  /* Video Modal — Cinema Mode */
   .video-modal {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 999;
-    background: rgba(0,0,0,0.92);
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.97);
+    backdrop-filter: blur(20px);
+    animation: cinemaFadeIn 0.4s ease;
+  }
+  @keyframes cinemaFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   .video-modal.active { display: flex; }
+
+  /* Cinema ambient glow behind video */
+  .video-modal::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 120%;
+    aspect-ratio: 16/9;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,107,53,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    animation: cinemaGlow 4s ease-in-out infinite alternate;
+  }
+  @keyframes cinemaGlow {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  /* Scanlines over entire modal */
+  .video-modal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 3px,
+      rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .video-modal-inner {
     position: relative;
-    width: 80vw;
-    max-width: 720px;
+    width: 88vw;
+    max-width: 1100px;
     aspect-ratio: 16/9;
     background: #000;
-    border: 1px solid rgba(255,107,53,0.3);
-    box-shadow: 0 0 60px rgba(255,107,53,0.2);
+    border: 1px solid rgba(255,107,53,0.25);
+    box-shadow: 
+      0 0 80px rgba(255,107,53,0.15),
+      0 0 200px rgba(255,107,53,0.05),
+      0 4px 60px rgba(0,0,0,0.8);
+    border-radius: 4px;
+    z-index: 2;
+    animation: cinemaSlideIn 0.5s cubic-bezier(0.16,1,0.3,1);
   }
+  @keyframes cinemaSlideIn {
+    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* Corner brackets on video frame */
+  .video-modal-inner::before,
+  .video-modal-inner::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: rgba(255,107,53,0.4);
+    border-style: solid;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .video-modal-inner::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .video-modal-inner::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
   .video-modal-inner iframe {
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: 3px;
   }
+
   .video-modal-close {
     position: absolute;
-    top: -40px;
+    top: -48px;
     right: 0;
-    background: none;
-    border: none;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 2px;
     color: var(--muted);
     font-family: 'Courier New', monospace;
     font-size: 11px;
     letter-spacing: 2px;
     cursor: pointer;
-    padding: 8px;
-    transition: color 0.2s;
+    padding: 8px 16px;
+    transition: all 0.25s;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .video-modal-close:hover { color: var(--accent1); }
+  .video-modal-close:hover { 
+    color: var(--accent1); 
+    border-color: var(--accent1);
+    background: rgba(255,107,53,0.08);
+  }
+
+  /* Cinema mode info bar */
+  .cinema-info {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+    text-transform: uppercase;
+    z-index: 3;
+  }
+  .cinema-info-esc {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cinema-info-esc kbd {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: inherit;
+    font-size: 9px;
+  }
+
+  /* Mobile modal */
+  @media (max-width: 768px) {
+    .video-modal-inner {
+      width: 96vw;
+      max-width: none;
+      border-radius: 2px;
+    }
+    .video-modal-close {
+      top: -42px;
+      right: 4px;
+      font-size: 10px;
+      padding: 6px 12px;
+    }
+    .cinema-info { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -2791,7 +2681,7 @@
   </div>
 
   <div class="next-level-wrap">
-    <div class="section-cta-msg" data-tr="BÖLÜM_01 TAMAMLANDI // +150 XP KAZANILDI" data-en="STAGE_01 COMPLETE // +150 XP EARNED">BÖLÜM_01 TAMAMLANDI // +150 XP KAZANILDI</div>
+    <div class="section-cta-msg" data-tr="Beni tanıdın. Uzmanlık alanlarımı görmeye hazırsın." data-en="You know me now. Ready to see my expertise.">Beni tanıdın. Uzmanlık alanlarımı görmeye hazırsın.</div>
     <button class="next-level-btn" onclick="goNextLevel('skills')">
       <span data-tr="BÖLÜM 02 — BECERİLER" data-en="EXPLORE SKILLS — STAGE 02">BÖLÜM 02 — BECERİLER</span>
       <span class="next-level-icon">→</span>
@@ -2958,10 +2848,11 @@
 
       </div>
 
-    
+  </div>
+  </div>
 
   <div class="next-level-wrap">
-    <div class="section-cta-msg" data-tr="Projelerimi gördün! +250 XP ⚡ Son olarak kariyer yolculuğumu keşfet →" data-en="You've seen my projects! +250 XP ⚡ Finally, explore my career journey →">Projelerimi gördün! +250 XP ⚡ Son olarak kariyer yolculuğumu keşfet →</div>
+    <div class="section-cta-msg" data-tr="Uzmanlık alanlarımı da öğrendin. Artık işlerimi görebilirsin." data-en="You've learned my skills. Now you can see my work.">Uzmanlık alanlarımı da öğrendin. Artık işlerimi görebilirsin.</div>
     <button class="next-level-btn" onclick="goNextLevel('videos')">
       <span data-tr="BÖLÜM 03 — PROJELER" data-en="STAGE 03 — PROJECTS">BÖLÜM 03 — PROJELER</span>
       <span class="next-level-icon">→</span>
@@ -2976,18 +2867,52 @@
     <div class="fade-up" style="text-align:left;">
       <div class="section-label" data-tr="03 — Seçili Çalışmalar" data-en="03 — Selected Work">03 — Seçili Çalışmalar</div>
       <h2 class="section-title" data-tr="<span>Projeler</span>" data-en="<span>Projects</span>"><span>Projeler</span></h2>
+      <div class="section-counter" data-tr="TOPLAM <span id='project-count'>5</span> PROJE" data-en="TOTAL <span>5</span> PROJECTS">TOPLAM <span id="project-count">5</span> PROJE</div>
     </div>
 
     <div class="filter-bar fade-up">
       <button class="filter-btn active" data-filter="all" data-tr="Tümü" data-en="All">Tümü</button>
-      <button class="filter-btn" data-filter="ai" data-tr="AI Video" data-en="AI Video">AI Video</button>
+      <button class="filter-btn" data-filter="ai-video" data-tr="AI Video" data-en="AI Video">AI Video</button>
+      <button class="filter-btn" data-filter="motion" data-tr="Motion Design" data-en="Motion Design">Motion Design</button>
+      <button class="filter-btn" data-filter="belgesel" data-tr="Belgesel" data-en="Documentary">Belgesel</button>
+      <button class="filter-btn" data-filter="video-editing" data-tr="Video Editing" data-en="Video Editing">Video Editing</button>
     </div>
 
+    <!-- ═══ FEATURED / HERO PROJECT ═══ -->
+    <div class="featured-project fade-up" data-cats="ai-video">
+      <div class="project-card" onclick="openVideo('Hk48w2dOiho')" data-yt="Hk48w2dOiho">
+        <div class="project-thumb-video">
+          <img src="https://img.youtube.com/vi/Hk48w2dOiho/maxresdefault.jpg" 
+               onerror="this.src='https://img.youtube.com/vi/Hk48w2dOiho/hqdefault.jpg'" 
+               alt="Karlar Kraliçesi">
+          <div class="hover-preview" id="preview-Hk48w2dOiho"></div>
+          <div class="yt-play-overlay">
+            <div class="yt-play-btn">
+              <svg viewBox="0 0 68 48" width="56" height="40"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="featured-badge" data-tr="Öne Çıkan Proje" data-en="Featured Project">Öne Çıkan Proje</div>
+          <h3 data-tr="Karlar Kraliçesi | Türkçe Gerçekçi Tarzda Masal" data-en="The Snow Queen | Realistic Turkish Fairy Tale">Karlar Kraliçesi | Türkçe Gerçekçi Tarzda Masal</h3>
+          <p data-tr="AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım." data-en="As an AI Artist & Video Editor, I turned the given script into a video. I handled all character and visual generation, scene design, AI video production, and editing/post-production.">AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım.</p>
+          <div class="project-tags">
+            <span class="tag">AI Video</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROJECTS GRID ═══ -->
     <div class="projects-grid" id="projects-grid">
 
-      <div class="project-card" data-cats="ai" onclick="openVideo('lqkT4TmoRKM')">
+      <!-- PROJE 2: Pamuk Prenses -->
+      <div class="project-card" data-cats="ai-video" onclick="openVideo('r74W2Y5ghVA')" data-yt="r74W2Y5ghVA">
         <div class="project-thumb-video">
-          <img src="https://raw.githubusercontent.com/aykuttuzemen/portfolio/main/thumb1.jpg" alt="Canlanan Tarih">
+          <img src="https://img.youtube.com/vi/r74W2Y5ghVA/maxresdefault.jpg" 
+               onerror="this.src='https://img.youtube.com/vi/r74W2Y5ghVA/hqdefault.jpg'" 
+               alt="Pamuk Prenses ve Yedi Cüceler">
+          <div class="hover-preview" id="preview-r74W2Y5ghVA"></div>
           <div class="yt-play-overlay">
             <div class="yt-play-btn">
               <svg viewBox="0 0 68 48" width="40" height="28"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
@@ -2995,59 +2920,90 @@
           </div>
         </div>
         <div class="project-info">
-          <h3>Canlanan Tarih — Demo</h3>
-          <p>AI destekli belgesel serisi demo videosu.</p>
-          <div class="project-tags"><span class="tag">AI Video</span></div>
+          <h3 data-tr="Pamuk Prenses ve Yedi Cüceler | Türkçe Gerçekçi Tarzda Masal" data-en="Snow White and the Seven Dwarfs | Realistic Turkish Fairy Tale">Pamuk Prenses ve Yedi Cüceler | Türkçe Gerçekçi Tarzda Masal</h3>
+          <p data-tr="AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım." data-en="As an AI Artist & Video Editor, I turned the given script into a video. I handled all character and visual generation, scene design, AI video production, and editing/post-production.">AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım.</p>
+          <div class="project-tags">
+            <span class="tag">AI Video</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card" data-cats="ai">
-        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
-          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
-            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+      <!-- PROJE 3: Güzel ve Çirkin -->
+      <div class="project-card" data-cats="ai-video" onclick="openVideo('BtBVe2sKXEs')" data-yt="BtBVe2sKXEs">
+        <div class="project-thumb-video">
+          <img src="https://img.youtube.com/vi/BtBVe2sKXEs/maxresdefault.jpg" 
+               onerror="this.src='https://img.youtube.com/vi/BtBVe2sKXEs/hqdefault.jpg'" 
+               alt="Güzel ve Çirkin">
+          <div class="hover-preview" id="preview-BtBVe2sKXEs"></div>
+          <div class="yt-play-overlay">
+            <div class="yt-play-btn">
+              <svg viewBox="0 0 68 48" width="40" height="28"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+            </div>
           </div>
         </div>
         <div class="project-info">
-          <h3>Proje 2</h3>
-          <p>Yakında eklenecek.</p>
-          <div class="project-tags"><span class="tag">AI Video</span></div>
+          <h3 data-tr="Güzel ve Çirkin | Türkçe 3D Tarzda Masal" data-en="Beauty and the Beast | 3D Style Turkish Fairy Tale">Güzel ve Çirkin | Türkçe 3D Tarzda Masal</h3>
+          <p data-tr="AI Artist & Video Editor olarak proje kapsamında AI ile görsel üretim ve video oluşturma aşamalarında görev aldım; shot ihtiyaçlarına göre içerik üreterek post-prodüksiyon akışını destekledim." data-en="As an AI Artist & Video Editor, I contributed to the visual generation and video creation stages using AI, producing content based on shot requirements and supporting the post-production workflow.">AI Artist & Video Editor olarak proje kapsamında AI ile görsel üretim ve video oluşturma aşamalarında görev aldım; shot ihtiyaçlarına göre içerik üreterek post-prodüksiyon akışını destekledim.</p>
+          <div class="project-tags">
+            <span class="tag">AI Video</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card" data-cats="ai">
-        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
-          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
-            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+      <!-- PROJE 4: Canlanan Tarih -->
+      <div class="project-card" data-cats="ai-video belgesel" onclick="openVideo('lqkT4TmoRKM')" data-yt="lqkT4TmoRKM">
+        <div class="project-thumb-video">
+          <img src="https://img.youtube.com/vi/lqkT4TmoRKM/maxresdefault.jpg" 
+               onerror="this.src='https://img.youtube.com/vi/lqkT4TmoRKM/hqdefault.jpg'" 
+               alt="Canlanan Tarih">
+          <div class="hover-preview" id="preview-lqkT4TmoRKM"></div>
+          <div class="yt-play-overlay">
+            <div class="yt-play-btn">
+              <svg viewBox="0 0 68 48" width="40" height="28"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+            </div>
           </div>
         </div>
         <div class="project-info">
-          <h3>Proje 3</h3>
-          <p>Yakında eklenecek.</p>
-          <div class="project-tags"><span class="tag">AI Video</span></div>
+          <h3 data-tr="Canlanan Tarih — Demo" data-en="Living History — Demo">Canlanan Tarih — Demo</h3>
+          <p data-tr="AI destekli belgesel serisi demo videosu. Tarihi olaylar sinematik bir deneyime dönüştürüldü." data-en="AI-powered documentary series demo. Historical events transformed into a cinematic experience.">AI destekli belgesel serisi demo videosu. Tarihi olaylar sinematik bir deneyime dönüştürüldü.</p>
+          <div class="project-tags">
+            <span class="tag">AI Video</span>
+            <span class="tag">Belgesel</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card" data-cats="ai">
-        <div class="project-thumb-video" style="background:linear-gradient(135deg,#0d0a00,#1a1200);">
-          <div class="yt-play-overlay" style="opacity:1;background:rgba(0,0,0,0.5);">
-            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,107,53,0.4);letter-spacing:3px;">YAKINDA</div>
+      <!-- PROJE 5: Bi Dakka Anlat -->
+      <div class="project-card" data-cats="ai-video video-editing" onclick="window.open('https://www.youtube.com/@bidakkadanlat','_blank')">
+        <div class="project-thumb-video">
+          <div style="width:100%;height:100%;position:absolute;top:0;left:0;background:linear-gradient(135deg,#0a0a1a 0%,#1a0a00 50%,#0d0d0d 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,107,53,0.5)" stroke-width="1"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="none"/><path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="rgba(255,107,53,0.5)"/></svg>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:rgba(255,107,53,0.7);">@bidakkadanlat</span>
+            <span style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;">YouTube Kanalı</span>
+          </div>
+          <div class="yt-play-overlay" style="background:rgba(0,0,0,0.15);">
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,107,53,0.6);border:1px solid rgba(255,107,53,0.3);padding:6px 16px;border-radius:2px;">KANALI ZİYARET ET →</div>
           </div>
         </div>
         <div class="project-info">
-          <h3>Proje 4</h3>
-          <p>Yakında eklenecek.</p>
-          <div class="project-tags"><span class="tag">AI Video</span></div>
+          <h3 data-tr="Bi Dakka Anlat | YouTube Kanalı" data-en="Bi Dakka Anlat | YouTube Channel">Bi Dakka Anlat | YouTube Kanalı</h3>
+          <p data-tr="Bu kanalda yayınlanan içeriklerin tamamının video üretim ve kurgu süreçlerini yürüttüm — görsel/video oluşturma, sahneleme, montaj ve final çıktılar." data-en="I managed the entire video production and editing pipeline for all content published on this channel — visual/video creation, staging, editing, and final outputs.">Bu kanalda yayınlanan içeriklerin tamamının video üretim ve kurgu süreçlerini yürüttüm — görsel/video oluşturma, sahneleme, montaj ve final çıktılar.</p>
+          <div class="project-tags">
+            <span class="tag">Video Editing</span>
+            <span class="tag">AI Video</span>
+          </div>
         </div>
       </div>
 
     </div>
+
+  </div>
   <div class="next-level-wrap">
-    <div class="section-cta-msg" data-tr="BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI" data-en="STAGE_03 COMPLETE // +250 XP EARNED">BÖLÜM_03 TAMAMLANDI // +250 XP KAZANILDI</div>
+    <div class="section-cta-msg" data-tr="Projelerimi gördün! Son olarak kariyer yolculuğumu keşfet →" data-en="You've seen my projects! Finally, explore my career journey →">Projelerimi gördün! Son olarak kariyer yolculuğumu keşfet →</div>
     <button class="next-level-btn" onclick="goNextLevel('timeline')">
       <span data-tr="BÖLÜM 04 — KARİYER" data-en="CAREER JOURNEY — STAGE 04">BÖLÜM 04 — KARİYER</span>
       <span class="next-level-icon">→</span>
     </button>
-  </div>
   </div>
 </section>
 
@@ -3126,7 +3082,7 @@
         </div>
       </div>
 
-      <!-- EĞİTİM --><!-- EĞİTİM -->
+      <!-- EĞİTİM -->
       <div class="timeline-col">
         <div class="timeline-col-title" data-tr="— Eğitim" data-en="— Education">— Eğitim</div>
         <div class="timeline" id="edu-timeline"><div class="timeline-light"></div>
@@ -3193,6 +3149,7 @@
   </div>
 
         <div class="next-level-wrap">
+    <div class="section-cta-msg" data-tr="Benim neler yapabileceğimi biliyorsun. İletişime geçmek için:" data-en="You know what I can do. To get in touch:">Benim neler yapabileceğimi biliyorsun. İletişime geçmek için:</div>
     <button class="next-level-btn" onclick="finishGame()">
       <span data-tr="OYUNU TAMAMLA" data-en="COMPLETE THE GAME">OYUNU TAMAMLA</span>
       <span class="next-level-icon">★</span>
@@ -3271,17 +3228,16 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
   function openVideo(youtubeId) {
     var modal = document.getElementById('video-modal');
     var iframe = document.getElementById('video-modal-iframe');
-    iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + youtubeId + '?autoplay=1&rel=0&modestbranding=1';
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
   function closeVideoModal(e) {
-    if (e && e.target !== document.getElementById('video-modal') && !e.target.classList.contains('video-modal-close')) return;
+    if (e && e.target !== document.getElementById('video-modal') && !e.target.classList.contains('video-modal-close') && !e.target.closest('.video-modal-close')) return;
     var modal = document.getElementById('video-modal');
     var iframe = document.getElementById('video-modal-iframe');
     modal.classList.remove('active');
@@ -3428,9 +3384,10 @@
   }
   typePrompt();
 
-  // PROJECT FILTER
+  // PROJECT FILTER (featured + grid)
   var filterBtns = document.querySelectorAll('.filter-btn');
-  var projectCards = document.querySelectorAll('.project-card');
+  var gridCards = document.querySelectorAll('#projects-grid .project-card');
+  var featuredWrap = document.querySelector('.featured-project');
 
   filterBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -3440,8 +3397,15 @@
       filterBtns.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
 
-      // Filter cards
-      projectCards.forEach(function(card) {
+      // Filter featured project
+      if (featuredWrap) {
+        var fCats = featuredWrap.getAttribute('data-cats') || '';
+        var fShow = filter === 'all' || fCats.indexOf(filter) !== -1;
+        featuredWrap.style.display = fShow ? '' : 'none';
+      }
+
+      // Filter grid cards
+      gridCards.forEach(function(card) {
         var cats = card.getAttribute('data-cats') || '';
         var show = filter === 'all' || cats.indexOf(filter) !== -1;
         if (show) {
@@ -3450,6 +3414,30 @@
           card.classList.add('hidden');
         }
       });
+    });
+  });
+
+  // HOVER VIDEO PREVIEW
+  var previewTimers = {};
+  document.querySelectorAll('.project-card[data-yt]').forEach(function(card) {
+    var ytId = card.getAttribute('data-yt');
+    if (!ytId || ytId.indexOf('VIDEO_ID') !== -1) return; // skip placeholders
+
+    card.addEventListener('mouseenter', function() {
+      previewTimers[ytId] = setTimeout(function() {
+        var previewEl = document.getElementById('preview-' + ytId);
+        if (previewEl && !previewEl.querySelector('iframe')) {
+          previewEl.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + ytId + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + ytId + '&start=5&modestbranding=1&showinfo=0" allow="autoplay" loading="lazy"></iframe>';
+        }
+        card.classList.add('previewing');
+      }, 800); // delay before loading preview
+    });
+
+    card.addEventListener('mouseleave', function() {
+      clearTimeout(previewTimers[ytId]);
+      card.classList.remove('previewing');
+      var previewEl = document.getElementById('preview-' + ytId);
+      if (previewEl) previewEl.innerHTML = ''; // cleanup iframe
     });
   });
 
@@ -3776,7 +3764,7 @@
     if (el) timelineObserver.observe(el);
   });
 
-  // STAGE TRACKER// STAGE TRACKER
+  // STAGE TRACKER
   var completedSections = {};
   var allSections = ['about', 'skills', 'videos', 'timeline'];
   var ranks = ['—', 'D', 'C', 'B', 'A', 'S+'];
@@ -3851,8 +3839,12 @@
 <!-- VIDEO MODAL -->
 <div class="video-modal" id="video-modal" onclick="closeVideoModal(event)">
   <div class="video-modal-inner" id="video-modal-inner">
-    <button class="video-modal-close" onclick="closeVideoModal()">✕ KAPAT</button>
+    <button class="video-modal-close" onclick="closeVideoModal()">✕ <span data-tr="KAPAT" data-en="CLOSE">KAPAT</span></button>
     <iframe id="video-modal-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="cinema-info">
+      <div class="cinema-info-esc"><kbd>ESC</kbd> <span data-tr="kapatmak için" data-en="to close">kapatmak için</span></div>
+      <div>CINEMA MODE</div>
+    </div>
   </div>
 </div>
 </body>
