@@ -396,6 +396,7 @@
     align-items: flex-start;
     gap: 16px;
     padding: 40px 0 20px;
+    width: 100%;
   }
   .next-level-btn {
     display: inline-flex;
@@ -1053,11 +1054,12 @@
   }
 
   /* ABOUT */
-  #about { padding: 100px 48px; }
+  #about { padding: 100px 0; }
 
   .about-container {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 48px;
   }
 
   .about-header {
@@ -1169,7 +1171,7 @@
   /* SKILLS */
   
   /* SKILLS */
-  #skills { padding: 100px 48px; }
+  #skills { padding: 100px 0; }
 
   .skills-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; width: 100%; box-sizing: border-box; }
 
@@ -1656,8 +1658,8 @@
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
   /* TIMELINE */
-  #timeline { padding: 100px 48px; position: relative; overflow: hidden; }
-  .timeline-wrapper { max-width: 1100px; margin: 0 auto; }
+  #timeline { padding: 100px 0; position: relative; overflow: hidden; }
+  .timeline-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
 
   .timeline-columns {
     display: grid;
@@ -2468,6 +2470,7 @@
     align-items: flex-start;
     gap: 16px;
     padding: 40px 0 20px;
+    width: 100%;
   }
     .section-cta-msg { font-size: 11px; }
     .terminal-box { min-height: 200px; }
@@ -2546,8 +2549,8 @@
   .video-modal.active { display: flex; }
   .video-modal-inner {
     position: relative;
-    width: 90vw;
-    max-width: 1000px;
+    width: 80vw;
+    max-width: 720px;
     aspect-ratio: 16/9;
     background: #000;
     border: 1px solid rgba(255,107,53,0.3);
