@@ -1239,34 +1239,33 @@
     border-radius: 50%;
     border: 1px dashed rgba(255,255,255,0.06);
   }
-  .skill-orbit-1 { width: 46%; height: 46%; }
-  .skill-orbit-2 { width: 70%; height: 70%; }
+  .skill-orbit-1 { width: 40%; height: 40%; }
+  .skill-orbit-2 { width: 68%; height: 68%; }
   .skill-orbit-3 { width: 96%; height: 96%; }
 
   /* Orbit rings — each ring rotates as a whole, nodes stay readable */
   .snode-ring {
     position: absolute;
     border-radius: 50%;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
   }
   .snode-ring-1 {
-    width: 46%; height: 46%;
-    animation: spin 18s linear infinite;
+    width: 40%; height: 40%;
+    animation: spin 20s linear infinite;
   }
   .snode-ring-2 {
-    width: 70%; height: 70%;
-    animation: spin 26s linear infinite reverse;
+    width: 68%; height: 68%;
+    animation: spin 30s linear infinite reverse;
   }
   .snode-ring-3 {
     width: 96%; height: 96%;
-    animation: spin 35s linear infinite;
+    animation: spin 40s linear infinite;
   }
 
-  /* Nodes: positioned at fixed angle on the ring, counter-rotate to stay readable */
+  /* Nodes positioned on ring edge via rotate + translateX */
   .snode-ring .snode {
     position: absolute;
     top: 50%; left: 50%;
+    margin: -14px 0 0 -14px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
@@ -1274,7 +1273,7 @@
     font-size: 10px;
     color: var(--muted);
     white-space: nowrap;
-    transition: all 0.3s;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
     cursor: default;
     z-index: 3;
   }
@@ -1291,27 +1290,38 @@
     vertical-align: middle;
   }
 
-  /* Position each node at its angle on the ring perimeter */
-  .snode-ring-1 .snode { animation: counter-spin-1 18s linear infinite; }
-  .snode-ring-2 .snode { animation: counter-spin-2 26s linear infinite; }
-  .snode-ring-3 .snode { animation: counter-spin-3 35s linear infinite; }
-
-  .snode-ring .snode {
-    --r: 50%;
-    transform: rotate(var(--angle)) translate(var(--r)) rotate(calc(-1 * var(--angle)));
+  /* Each node: rotate to angle → move out to edge → counter-rotate for readability */
+  /* Ring 1: radius = 20% of 420px ≈ 84px */
+  .snode-ring-1 .snode {
+    animation: counter-spin-fwd 20s linear infinite;
+    transform: rotate(var(--angle)) translateX(84px) rotate(calc(-1 * var(--angle)));
   }
-  .snode-ring-1 .snode { --r: calc(50% - 0px); }
-  .snode-ring-2 .snode { --r: calc(50% - 0px); }
-  .snode-ring-3 .snode { --r: calc(50% - 0px); }
+  /* Ring 2: radius = 34% of 420px ≈ 143px */
+  .snode-ring-2 .snode {
+    animation: counter-spin-rev 30s linear infinite;
+    transform: rotate(var(--angle)) translateX(143px) rotate(calc(-1 * var(--angle)));
+  }
+  /* Ring 3: radius = 48% of 420px ≈ 202px */
+  .snode-ring-3 .snode {
+    animation: counter-spin-fwd 40s linear infinite;
+    transform: rotate(var(--angle)) translateX(202px) rotate(calc(-1 * var(--angle)));
+  }
 
-  /* Counter-spin to keep text readable */
-  @keyframes counter-spin-1 { from { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) - 0deg)); } to { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) - 360deg)); } }
-  @keyframes counter-spin-2 { from { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) + 0deg)); } to { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) + 360deg)); } }
-  @keyframes counter-spin-3 { from { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) - 0deg)); } to { transform: rotate(var(--angle)) translate(50%) rotate(calc(-1 * var(--angle) - 360deg)); } }
+  @keyframes counter-spin-fwd {
+    from { transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle) + 0deg)); }
+    to   { transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle) - 360deg)); }
+  }
+  @keyframes counter-spin-rev {
+    from { transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle) + 0deg)); }
+    to   { transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle) + 360deg)); }
+  }
 
   @media (max-width: 768px) {
     .skill-orb-wrap { width: 300px; height: 300px; margin: 0 auto; }
     .snode-ring .snode { font-size: 9px; padding: 3px 8px; }
+    .snode-ring-1 .snode { transform: rotate(var(--angle)) translateX(60px) rotate(calc(-1 * var(--angle))); }
+    .snode-ring-2 .snode { transform: rotate(var(--angle)) translateX(102px) rotate(calc(-1 * var(--angle))); }
+    .snode-ring-3 .snode { transform: rotate(var(--angle)) translateX(144px) rotate(calc(-1 * var(--angle))); }
   }
   .skill-categories {
     width: 100%;
@@ -2887,25 +2897,25 @@
           <div class="skill-orbit skill-orbit-2"></div>
           <div class="skill-orbit skill-orbit-3"></div>
 
-          <!-- Inner orbit (3 nodes, evenly spaced, slow) -->
-          <div class="snode-ring snode-ring-1">
-            <div class="snode" style="--angle:0deg"><span class="snode-dot" style="background:#ff6b35"></span>After Effects</div>
-            <div class="snode" style="--angle:120deg"><span class="snode-dot" style="background:#ff3d6b"></span>Premiere Pro</div>
-            <div class="snode" style="--angle:240deg"><span class="snode-dot" style="background:#ffb347"></span>Motion</div>
+          <!-- Inner orbit (2 nodes, opposite) -->
+          <div class="snode-ring snode-ring-1" style="--orbit-r:84px">
+            <div class="snode" style="--angle:0deg;--orbit-r:84px"><span class="snode-dot" style="background:#ff6b35"></span>After Effects</div>
+            <div class="snode" style="--angle:180deg;--orbit-r:84px"><span class="snode-dot" style="background:#ff3d6b"></span>Premiere Pro</div>
           </div>
 
           <!-- Mid orbit (3 nodes, evenly spaced) -->
-          <div class="snode-ring snode-ring-2">
-            <div class="snode" style="--angle:30deg"><span class="snode-dot" style="background:#ffb347"></span>Kling</div>
-            <div class="snode" style="--angle:150deg"><span class="snode-dot" style="background:#ff6b35"></span>Veo 3.1</div>
-            <div class="snode" style="--angle:270deg"><span class="snode-dot" style="background:#ff3d6b"></span>Higgsfield</div>
+          <div class="snode-ring snode-ring-2" style="--orbit-r:143px">
+            <div class="snode" style="--angle:20deg;--orbit-r:143px"><span class="snode-dot" style="background:#ffb347"></span>Kling</div>
+            <div class="snode" style="--angle:140deg;--orbit-r:143px"><span class="snode-dot" style="background:#ff6b35"></span>Runway</div>
+            <div class="snode" style="--angle:260deg;--orbit-r:143px"><span class="snode-dot" style="background:#ff3d6b"></span>Higgsfield</div>
           </div>
 
-          <!-- Outer orbit (3 nodes, evenly spaced) -->
-          <div class="snode-ring snode-ring-3">
-            <div class="snode" style="--angle:60deg"><span class="snode-dot" style="background:#ff6b35"></span>Nanobanana</div>
-            <div class="snode" style="--angle:180deg"><span class="snode-dot" style="background:#ff3d6b"></span>Unreal Engine (Level Design)</div>
-            <div class="snode" style="--angle:300deg"><span class="snode-dot" style="background:#ffb347"></span>Minimax</div>
+          <!-- Outer orbit (4 nodes, evenly spaced) -->
+          <div class="snode-ring snode-ring-3" style="--orbit-r:202px">
+            <div class="snode" style="--angle:45deg;--orbit-r:202px"><span class="snode-dot" style="background:#ff6b35"></span>Nanobanana</div>
+            <div class="snode" style="--angle:135deg;--orbit-r:202px"><span class="snode-dot" style="background:#ffb347"></span>Veo 3.1</div>
+            <div class="snode" style="--angle:225deg;--orbit-r:202px"><span class="snode-dot" style="background:#ff3d6b"></span>Minimax</div>
+            <div class="snode" style="--angle:315deg;--orbit-r:202px"><span class="snode-dot" style="background:#ffb347"></span>Motion</div>
           </div>
 
           <!-- Center -->
