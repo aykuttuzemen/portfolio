@@ -1855,6 +1855,11 @@
     font-family: 'Courier New', monospace;
     height: 100%;
     min-height: 320px;
+    animation: terminalGlow 3s ease-in-out infinite alternate;
+  }
+  @keyframes terminalGlow {
+    0% { box-shadow: 0 0 0px rgba(255,107,53,0); border-color: rgba(255,107,53,0.2); }
+    100% { box-shadow: 0 0 20px rgba(255,107,53,0.15), 0 0 60px rgba(255,107,53,0.05); border-color: rgba(255,107,53,0.35); }
   }
   .terminal-bar {
     display: flex;
@@ -3054,13 +3059,14 @@
       <button class="filter-btn active" data-filter="all" data-tr="Tümü" data-en="All">Tümü</button>
       <button class="filter-btn" data-filter="ai-video" data-tr="AI Video" data-en="AI Video">AI Video</button>
       <button class="filter-btn" data-filter="motion" data-tr="Motion Design" data-en="Motion Design">Motion Design</button>
+      <button class="filter-btn" data-filter="masal" data-tr="Masal" data-en="Fairy Tale">Masal</button>
       <button class="filter-btn" data-filter="belgesel" data-tr="Belgesel" data-en="Documentary">Belgesel</button>
       <button class="filter-btn" data-filter="video-editing" data-tr="Video Editing" data-en="Video Editing">Video Editing</button>
       <button class="filter-btn" data-filter="reklam" data-tr="Reklam" data-en="Commercial">Reklam</button>
     </div>
 
     <!-- ═══ FEATURED / HERO PROJECT ═══ -->
-    <div class="featured-project fade-up" data-cats="ai-video">
+    <div class="featured-project fade-up" data-cats="ai-video masal">
       <div class="project-card" data-yt="Hk48w2dOiho">
         <div class="project-thumb-video">
           <img src="https://img.youtube.com/vi/Hk48w2dOiho/maxresdefault.jpg" 
@@ -3079,6 +3085,7 @@
           <p data-tr="AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım." data-en="As an AI Artist & Video Editor, I turned the given script into a video. I handled all character and visual generation, scene design, AI video production, and editing/post-production.">AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım.</p>
           <div class="project-tags">
             <span class="tag">AI Video</span>
+            <span class="tag" data-tr="Masal" data-en="Fairy Tale">Masal</span>
           </div>
         </div>
       </div>
@@ -3088,7 +3095,7 @@
     <div class="projects-grid" id="projects-grid">
 
       <!-- PROJE 2: Pamuk Prenses -->
-      <div class="project-card" data-cats="ai-video" data-yt="r74W2Y5ghVA">
+      <div class="project-card" data-cats="ai-video masal" data-yt="r74W2Y5ghVA">
         <div class="project-thumb-video">
           <img src="https://img.youtube.com/vi/r74W2Y5ghVA/maxresdefault.jpg" 
                onerror="this.src='https://img.youtube.com/vi/r74W2Y5ghVA/hqdefault.jpg'" 
@@ -3105,12 +3112,13 @@
           <p data-tr="AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım." data-en="As an AI Artist & Video Editor, I turned the given script into a video. I handled all character and visual generation, scene design, AI video production, and editing/post-production.">AI Artist & Video Editor olarak bu projede gelen senaryoyu videoya çevirdim. Karakter ve görsel üretimi, sahne tasarımı, AI ile video üretimi ve kurgu/post-prodüksiyon süreçlerinin tamamını ben yaptım.</p>
           <div class="project-tags">
             <span class="tag">AI Video</span>
+            <span class="tag" data-tr="Masal" data-en="Fairy Tale">Masal</span>
           </div>
         </div>
       </div>
 
       <!-- PROJE 3: Güzel ve Çirkin -->
-      <div class="project-card" data-cats="ai-video" data-yt="BtBVe2sKXEs">
+      <div class="project-card" data-cats="ai-video masal" data-yt="BtBVe2sKXEs">
         <div class="project-thumb-video">
           <img src="https://img.youtube.com/vi/BtBVe2sKXEs/maxresdefault.jpg" 
                onerror="this.src='https://img.youtube.com/vi/BtBVe2sKXEs/hqdefault.jpg'" 
@@ -3149,13 +3157,13 @@
           <p data-tr="AI destekli belgesel serisi demo videosu. Tarihi olaylar sinematik bir deneyime dönüştürüldü." data-en="AI-powered documentary series demo. Historical events transformed into a cinematic experience.">AI destekli belgesel serisi demo videosu. Tarihi olaylar sinematik bir deneyime dönüştürüldü.</p>
           <div class="project-tags">
             <span class="tag">AI Video</span>
-            <span class="tag">Belgesel</span>
+            <span class="tag" data-tr="Belgesel" data-en="Documentary">Belgesel</span>
           </div>
         </div>
       </div>
 
       <!-- PROJE 5: GYODER Reklam Filmi -->
-      <div class="project-card" data-cats="reklam" data-yt="hcvHOdUESf8">
+      <div class="project-card" data-cats="reklam ai-video" data-yt="hcvHOdUESf8">
         <div class="project-thumb-video">
           <img src="https://img.youtube.com/vi/hcvHOdUESf8/maxresdefault.jpg" 
                onerror="this.src='https://img.youtube.com/vi/hcvHOdUESf8/hqdefault.jpg'" 
@@ -3171,6 +3179,7 @@
           <h3 data-tr="GYODER | Reklam Filmi" data-en="GYODER | Commercial Film">GYODER | Reklam Filmi</h3>
           <p data-tr="Reklam metni ve tasarımlar üzerinden görsel üretim, video oluşturma ve kurgu süreçlerini yürüttüm." data-en="I handled the visual production, video creation, and editing processes based on the ad copy and designs provided.">Reklam metni ve tasarımlar üzerinden görsel üretim, video oluşturma ve kurgu süreçlerini yürüttüm.</p>
           <div class="project-tags">
+            <span class="tag">AI Video</span>
             <span class="tag" data-tr="Reklam" data-en="Commercial">Reklam</span>
           </div>
         </div>
@@ -3189,7 +3198,7 @@
           <h3 data-tr="Bi Dakka Anlat | YouTube Kanalı" data-en="Bi Dakka Anlat | YouTube Channel">Bi Dakka Anlat | YouTube Kanalı</h3>
           <p data-tr="Bu kanalda yayınlanan içeriklerin tamamının video üretim ve kurgu süreçlerini yürüttüm — görsel/video oluşturma, sahneleme, montaj ve final çıktılar." data-en="I managed the entire video production and editing pipeline for all content published on this channel — visual/video creation, staging, editing, and final outputs.">Bu kanalda yayınlanan içeriklerin tamamının video üretim ve kurgu süreçlerini yürüttüm — görsel/video oluşturma, sahneleme, montaj ve final çıktılar.</p>
           <div class="project-tags">
-            <span class="tag">Video Editing</span>
+            <span class="tag" data-tr="Video Editing" data-en="Video Editing">Video Editing</span>
             <span class="tag">AI Video</span>
           </div>
         </div>
@@ -3201,12 +3210,12 @@
           <div style="width:100%;height:100%;position:absolute;top:0;left:0;background:linear-gradient(135deg,#0a0a1a 0%,#1a0a00 50%,#0d0d0d 100%);"></div>
           <div class="yt-play-overlay" style="background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
             <span style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:rgba(255,107,53,0.85);">MAMAPLUS</span>
-            <span style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Video Koleksiyonu</span>
+            <span style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;"data-tr="Video Koleksiyonu" data-en="Video Collection">Video Koleksiyonu</span>
             <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,107,53,0.7);border:1px solid rgba(255,107,53,0.35);padding:6px 16px;border-radius:2px;backdrop-filter:blur(4px);background:rgba(0,0,0,0.3);margin-top:4px;" data-tr="KOLEKSİYONU GÖR →" data-en="VIEW COLLECTION →">KOLEKSİYONU GÖR →</div>
           </div>
         </div>
         <div class="project-info">
-          <h3 data-tr="Mamaplus | Video Prodüksiyon" data-en="Mamaplus | Video Production">Mamaplus | Video Prodüksiyon</h3>
+          <h3 data-tr="Mamaplus | AI Video" data-en="Mamaplus | AI Video">Mamaplus | AI Video</h3>
           <p data-tr="Mamaplus için hazırladığım AI video çalışmaları." data-en="AI video work I created for Mamaplus.">Mamaplus için hazırladığım AI video çalışmaları.</p>
           <div class="project-tags"><span class="tag">AI Video</span></div>
         </div>
@@ -3244,17 +3253,17 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub">AI Artist & Video Editor</div>
-                <div class="timeline-desc">Yapay zeka araçlarıyla video üretimi ve editörlük. Midjourney, Krea, Stylar, Runway, Minimax aktif kullanımda.</div>
+                <div class="timeline-desc"data-tr="Yapay zeka araçlarıyla video üretimi ve editörlük. Midjourney, Krea, Stylar, Runway, Minimax aktif kullanımda." data-en="Video production and editing with AI tools. Actively using Midjourney, Krea, Stylar, Runway, Minimax.">Yapay zeka araçlarıyla video üretimi ve editörlük. Midjourney, Krea, Stylar, Runway, Minimax aktif kullanımda.</div>
               </div>
               <div class="timeline-sub">
-                <div class="timeline-role-sub">Video Editörü</div>
-                <div class="timeline-year-sub">Tem 2024 — Eyl 2025</div>
-                <div class="timeline-desc">KIŞAKES projesinde Video Editörü olarak görev yaptım.</div>
+                <div class="timeline-role-sub" data-tr="Video Editörü" data-en="Video Editor">Video Editörü</div>
+                <div class="timeline-year-sub" data-tr="Tem 2024 — Eyl 2025" data-en="Jul 2024 — Sep 2025">Tem 2024 — Eyl 2025</div>
+                <div class="timeline-desc"data-tr="KIŞAKES projesinde Video Editörü olarak görev yaptım." data-en="Served as Video Editor on the KIŞAKES project.">KIŞAKES projesinde Video Editörü olarak görev yaptım.</div>
               </div>
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="YZ Destekli Karakter Tasarımı" data-en="AI-Assisted Character Design">YZ Destekli Karakter Tasarımı</div>
-                <div class="timeline-year-sub">Kas 2023 — Kas 2024</div>
-                <div class="timeline-desc">Yapay zeka araçlarıyla karakter tasarımı ve animasyon üretimi.</div>
+                <div class="timeline-year-sub" data-tr="Kas 2023 — Kas 2024" data-en="Nov 2023 — Nov 2024">Kas 2023 — Kas 2024</div>
+                <div class="timeline-desc"data-tr="Yapay zeka araçlarıyla karakter tasarımı ve animasyon üretimi." data-en="Character design and animation production using AI tools.">Yapay zeka araçlarıyla karakter tasarımı ve animasyon üretimi.</div>
               </div>
             </div>
           </div>
@@ -3266,7 +3275,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="Eğitmen — Unreal Engine" data-en="Instructor — Unreal Engine">Eğitmen — Unreal Engine</div>
-                <div class="timeline-desc">Unreal Engine, 3B modelleme ve hareket tasarımı eğitimleri.</div>
+                <div class="timeline-desc"data-tr="Unreal Engine, 3B modelleme ve hareket tasarımı eğitimleri." data-en="Unreal Engine, 3D modeling, and motion design training.">Unreal Engine, 3B modelleme ve hareket tasarımı eğitimleri.</div>
               </div>
             </div>
           </div>
@@ -3278,7 +3287,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub">Motion Designer</div>
-                <div class="timeline-desc">Hareket tasarımı, video düzenleme ve içerik üretimi.</div>
+                <div class="timeline-desc"data-tr="Hareket tasarımı, video düzenleme ve içerik üretimi." data-en="Motion design, video editing, and content production.">Hareket tasarımı, video düzenleme ve içerik üretimi.</div>
               </div>
             </div>
           </div>
@@ -3290,7 +3299,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="Genel Yayın Yönetmeni" data-en="Editor-in-Chief">Genel Yayın Yönetmeni</div>
-                <div class="timeline-desc">Türkiye sorumlusu. Sosyal medya, video düzenleme ve içerik üretimi.</div>
+                <div class="timeline-desc"data-tr="Türkiye sorumlusu. Sosyal medya, video düzenleme ve içerik üretimi." data-en="Turkey manager. Social media, video editing, and content production.">Türkiye sorumlusu. Sosyal medya, video düzenleme ve içerik üretimi.</div>
               </div>
             </div>
           </div>
@@ -3320,7 +3329,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="Lisans — Tarih (AUZEF)" data-en="Bachelor's — History (AUZEF)">Lisans — Tarih (AUZEF)</div>
-                <div class="timeline-desc">Açık ve uzaktan eğitim programı.</div>
+                <div class="timeline-desc"data-tr="Açık ve uzaktan eğitim programı." data-en="Open and distance education program.">Açık ve uzaktan eğitim programı.</div>
               </div>
             </div>
           </div>
@@ -3331,7 +3340,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="Lisans — Çizgi Film ve Animasyon (Tam Burs)" data-en="Bachelor's — Animation (Full Scholarship)">Lisans — Çizgi Film ve Animasyon (Tam Burs)</div>
-                <div class="timeline-desc">Grafik Tasarım, 3D Tasarım ve animasyon alanında eğitim.</div>
+                <div class="timeline-desc"data-tr="Grafik Tasarım, 3D Tasarım ve animasyon alanında eğitim." data-en="Education in Graphic Design, 3D Design, and Animation.">Grafik Tasarım, 3D Tasarım ve animasyon alanında eğitim.</div>
               </div>
             </div>
           </div>
@@ -3342,7 +3351,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="Önlisans — Animasyon & Video Grafik" data-en="Associate's — Animation & Video Graphics">Önlisans — Animasyon & Video Grafik</div>
-                <div class="timeline-desc">Animation, Interactive Technology, Video Graphics and Special Effects. Not: 3.20</div>
+                <div class="timeline-desc"data-tr="Animation, Interactive Technology, Video Graphics and Special Effects. Not: 3.20" data-en="Animation, Interactive Technology, Video Graphics and Special Effects. GPA: 3.20">Animation, Interactive Technology, Video Graphics and Special Effects. Not: 3.20</div>
               </div>
             </div>
           </div>
@@ -3353,7 +3362,7 @@
             <div class="timeline-sub-items">
               <div class="timeline-sub">
                 <div class="timeline-role-sub" data-tr="MYO — Elektrik/Elektronik Bakımı" data-en="Vocational — Electrical/Electronics">MYO — Elektrik/Elektronik Bakımı ve Onarım Teknolojisi</div>
-                <div class="timeline-desc">Mühendislik temelleri, analitik düşünce.</div>
+                <div class="timeline-desc"data-tr="Mühendislik temelleri, analitik düşünce." data-en="Engineering fundamentals, analytical thinking.">Mühendislik temelleri, analitik düşünce.</div>
               </div>
             </div>
           </div>
@@ -3634,6 +3643,9 @@
       // Switch prompts
       prompts = lang === 'en' ? promptsEN : promptsTR;
       pIdx = 0; cIdx = 0; deleting = false;
+      // Switch terminal
+      terminalLines = lang === 'en' ? terminalLinesEN : terminalLinesTR;
+      initTerminal();
       // Switch UI language
       setLang(lang);
     });
@@ -3864,7 +3876,7 @@
   }
 
   // TERMINAL
-  var terminalLines = [
+  var terminalLinesTR = [
     { type: 'prompt', cmd: 'whoami', delay: 300 },
     { type: 'out', text: 'Alpagut Aykut Tüzemen', delay: 600 },
     { type: 'prompt', cmd: 'cat ./title.txt', delay: 1200 },
@@ -3883,6 +3895,26 @@
     { type: 'green', text: '✓ Müsait: Yeni projeler için açık', delay: 5600 },
     { type: 'prompt', cmd: '', delay: 6500, cursor: true },
   ];
+  var terminalLinesEN = [
+    { type: 'prompt', cmd: 'whoami', delay: 300 },
+    { type: 'out', text: 'Alpagut Aykut Tüzemen', delay: 600 },
+    { type: 'prompt', cmd: 'cat ./title.txt', delay: 1200 },
+    { type: 'out', text: 'AI Artist & Video Editor', delay: 1500 },
+    { type: 'out', text: 'Motion Designer', delay: 1800 },
+    { type: 'prompt', cmd: 'ls ./skills', delay: 2400 },
+    { type: 'out', text: 'After_Effects/  Kling/  Unreal_Engine/', delay: 2700 },
+    { type: 'out', text: 'Midjourney/     Runway/  Higgsfield/', delay: 3000 },
+    { type: 'prompt', cmd: 'cat ./experience.log', delay: 3600 },
+    { type: 'out', text: '[2018] MozartCultures — Broadcast Director', delay: 3900 },
+    { type: 'out', text: '[2020] CapDogs — Co-Founder', delay: 4100 },
+    { type: 'out', text: '[2021] Alaaddin — Motion Designer', delay: 4300 },
+    { type: 'out', text: '[2022] Navras — Unreal Instructor', delay: 4500 },
+    { type: 'out', text: '[2024] Adisebaba — AI Artist', delay: 4700 },
+    { type: 'prompt', cmd: 'check --status', delay: 5300 },
+    { type: 'green', text: '✓ Available: Open for new projects', delay: 5600 },
+    { type: 'prompt', cmd: '', delay: 6500, cursor: true },
+  ];
+  var terminalLines = terminalLinesTR;
 
   function initTerminal() {
     var body = document.getElementById('terminal-body');
