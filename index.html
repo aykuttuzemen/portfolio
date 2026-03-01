@@ -1657,8 +1657,9 @@
     position: fixed;
     inset: 0;
     z-index: 998;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(20px);
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     overflow-y: auto;
     animation: cinemaFadeIn 0.4s ease;
   }
@@ -3168,12 +3169,11 @@
       <!-- PROJE 6: Mamaplus (tıklayınca galeri modal açılır) -->
       <div class="project-card" data-cats="video-editing" id="mamaplus-trigger">
         <div class="project-thumb-video">
-          <div style="width:100%;height:100%;position:absolute;top:0;left:0;background:linear-gradient(135deg,#0a0a1a 0%,#1a0a00 50%,#0d0d0d 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
-            <span style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:rgba(255,107,53,0.8);">MAMAPLUS</span>
-            <span style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;">Video Koleksiyonu</span>
-          </div>
-          <div class="yt-play-overlay" style="background:rgba(0,0,0,0.2);">
-            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,107,53,0.7);border:1px solid rgba(255,107,53,0.35);padding:6px 16px;border-radius:2px;backdrop-filter:blur(4px);background:rgba(0,0,0,0.3);" data-tr="KOLEKSİYONU GÖR →" data-en="VIEW COLLECTION →">KOLEKSİYONU GÖR →</div>
+          <div style="width:100%;height:100%;position:absolute;top:0;left:0;background:linear-gradient(135deg,#0a0a1a 0%,#1a0a00 50%,#0d0d0d 100%);"></div>
+          <div class="yt-play-overlay" style="background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:rgba(255,107,53,0.85);">MAMAPLUS</span>
+            <span style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Video Koleksiyonu</span>
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,107,53,0.7);border:1px solid rgba(255,107,53,0.35);padding:6px 16px;border-radius:2px;backdrop-filter:blur(4px);background:rgba(0,0,0,0.3);margin-top:4px;" data-tr="KOLEKSİYONU GÖR →" data-en="VIEW COLLECTION →">KOLEKSİYONU GÖR →</div>
           </div>
         </div>
         <div class="project-info">
@@ -3360,11 +3360,6 @@
       <div class="mamaplus-video-card" data-mamaplus-yt="uUYp6nN33dQ">
         <div class="thumb"><img src="https://img.youtube.com/vi/uUYp6nN33dQ/hqdefault.jpg" alt="Mamaplus 1"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
         <div class="card-info"><h4>Mamaplus #1</h4></div>
-      </div>
-
-      <div class="mamaplus-video-card" data-mamaplus-yt="pYbxTS7l-ms">
-        <div class="thumb"><img src="https://img.youtube.com/vi/pYbxTS7l-ms/hqdefault.jpg" alt="Mamaplus 2"><div class="play-icon"><svg viewBox="0 0 68 48" width="48" height="34"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div></div>
-        <div class="card-info"><h4>Mamaplus #2</h4></div>
       </div>
 
       <div class="mamaplus-video-card" data-mamaplus-yt="BQPG54yAjz0">
