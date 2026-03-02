@@ -303,13 +303,13 @@
     <!-- Contact items -->
     <div class="card-contacts">
 
-      <a href="/cdn-cgi/l/email-protection#42233b293736363738272f272c02252f232b2e6c212d2f" class="contact-item">
+      <a href="mailto:aykuttuzemen@gmail.com" class="contact-item">
         <div class="contact-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </div>
         <div class="contact-info">
           <div class="contact-label">Mail</div>
-          <div class="contact-value"><span class="__cf_email__" data-cfemail="b6d7cfddc3c2c2c3ccd3dbd3d8f6d1dbd7dfda98d5d9db">[email&#160;protected]</span></div>
+          <div class="contact-value">aykuttuzemen@gmail.com</div>
         </div>
         <div class="contact-arrow">→</div>
       </a>
@@ -325,7 +325,7 @@
         <div class="contact-arrow">→</div>
       </a>
 
-      <a href="https://www.linkedin.com/in/aykuttuzemen" target="_blank" class="contact-item">
+      <a href="https://www.linkedin.com/in/alpagut-aykut-t%C3%BCzemen-107927b5/" target="_blank" class="contact-item">
         <div class="contact-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff6b35"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
         </div>
@@ -362,7 +362,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   // Typewriter
   var lines = ["iletişime geçmeye hazır mısın?", "ready to connect?", "aykuttuzemen@gmail.com"];
   var ci = 0, li = 0, del = false;
@@ -376,4 +376,13 @@
       if (ci === cur.length) { del = true; setTimeout(type, 2000); return; }
       setTimeout(type, 60);
     } else {
-      el.textConte
+      el.textContent = cur.slice(0, ci - 1);
+      ci--;
+      if (ci === 0) { del = false; li = (li + 1) % lines.length; setTimeout(type, 500); return; }
+      setTimeout(type, 30);
+    }
+  }
+  setTimeout(type, 1000);
+</script>
+</body>
+</html>
